@@ -2,9 +2,11 @@ package com.example.overcooked;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 
+import com.example.overcooked.login.LoginActivity;
 import com.example.overcooked.model.Model;
 
 public class IntroActivity extends AppCompatActivity {
@@ -22,11 +24,26 @@ public class IntroActivity extends AppCompatActivity {
             }
             if(Model.instance.isSignedIn()) {
                 Model.instance.mainThread.post(() -> {
-                    Log.d("TAG", "User is logged in");
+                    toFeedActivity();
+
                 });
             } else {
-                Log.d("TAG", "User needs to log in");
+                toLoginActivity();
             }
         });
+    }
+
+    private void toLoginActivity() {
+        Log.d("TAG", "User is logged in");
+        Intent intent = new Intent(this, LoginActivity.class);
+        startActivity(intent);
+        finish();
+    }
+
+    private void toFeedActivity() {
+        Log.d("TAG", "User needs to log in");
+//        Intent intent = new Intent(this, BaseActivity.class);
+//        startActivity(intent);
+//        finish();
     }
 }

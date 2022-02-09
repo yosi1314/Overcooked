@@ -15,6 +15,6 @@ public class Model {
 
 
     public boolean isSignedIn() {
-        return true;
+        return false;
     }
 }
