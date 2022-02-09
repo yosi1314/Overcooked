@@ -5,6 +5,10 @@ import android.os.Looper;
 
 import androidx.core.os.HandlerCompat;
 
+import com.example.overcooked.R;
+
+import java.util.ArrayList;
+import java.util.List;
 import java.util.concurrent.Executor;
 import java.util.concurrent.Executors;
 
@@ -16,5 +20,19 @@ public class Model {
 
     public boolean isSignedIn() {
         return false;
+    }
+
+    public List<Post> getAllPosts() {
+        List<Post> posts = new ArrayList<Post>();
+        for(int i=0; i<20; i++){
+            posts.add(
+                    new Post(i,
+                            "Title" + i,
+                            "Description" + i,
+                            "Author" + i,
+                            R.drawable.main_logo)
+            );
+        }
+        return posts;
     }
 }

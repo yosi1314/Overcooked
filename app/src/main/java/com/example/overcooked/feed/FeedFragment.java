@@ -1,63 +1,29 @@
 package com.example.overcooked.feed;
 
 import android.os.Bundle;
-
-import androidx.fragment.app.Fragment;
-import androidx.recyclerview.widget.RecyclerView;
-
+import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
+import android.widget.TextView;
+
+import androidx.annotation.NonNull;
+import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.overcooked.R;
+import com.example.overcooked.model.Model;
+import com.example.overcooked.model.Post;
 
-/**
- * A simple {@link Fragment} subclass.
- * Use the {@link FeedFragment#newInstance} factory method to
- * create an instance of this fragment.
- */
+
 public class FeedFragment extends Fragment {
 
-
-    // TODO: Rename parameter arguments, choose names that match
-    // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-    private static final String ARG_PARAM1 = "param1";
-    private static final String ARG_PARAM2 = "param2";
-
-    // TODO: Rename and change types of parameters
-    private String mParam1;
-    private String mParam2;
-
-    public FeedFragment() {
-        // Required empty public constructor
-    }
-
-    /**
-     * Use this factory method to create a new instance of
-     * this fragment using the provided parameters.
-     *
-     * @param param1 Parameter 1.
-     * @param param2 Parameter 2.
-     * @return A new instance of fragment FeedFragment.
-     */
-    // TODO: Rename and change types and number of parameters
-    public static FeedFragment newInstance(String param1, String param2) {
-        FeedFragment fragment = new FeedFragment();
-        Bundle args = new Bundle();
-        args.putString(ARG_PARAM1, param1);
-        args.putString(ARG_PARAM2, param2);
-        fragment.setArguments(args);
-        return fragment;
-    }
-
-    @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        if (getArguments() != null) {
-            mParam1 = getArguments().getString(ARG_PARAM1);
-            mParam2 = getArguments().getString(ARG_PARAM2);
-        }
-    }
+    Model postsModel = Model.instance;
+    PostAdapter postAdapter;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -68,6 +34,83 @@ public class FeedFragment extends Fragment {
         RecyclerView feed = view.findViewById(R.id.feed_rv);
         feed.setHasFixedSize(true);
 
+        feed.setLayoutManager(new LinearLayoutManager(getContext()));
+
+        postAdapter = new PostAdapter();
+        feed.setAdapter(postAdapter);
+
+        postAdapter.setOnItemClickListener((v, position) -> {
+            int postId = postsModel.getAllPosts().get(position).getId();
+//                Navigation.findNavController(v).navigate(StudentListRvFragmentDirections.actionStudentListRvFragmentToStudentDetailsFragment(stId));
+            Log.d("TAG", "The post id is: " + postId);
+        });
+
         return view;
     }
+
+    class PostViewHolder extends RecyclerView.ViewHolder {
+        TextView titleTv;
+        TextView descriptionTv;
+        TextView authorTv;
+        ImageView thumbnailImv;
+
+        public PostViewHolder(@NonNull View itemView, OnItemClickListener listener) {
+            super(itemView);
+            titleTv = itemView.findViewById(R.id.post_title_tv);
+            descriptionTv = itemView.findViewById(R.id.post_desc_tv);
+            authorTv = itemView.findViewById(R.id.post_author_tv);
+            thumbnailImv = itemView.findViewById(R.id.post_image_imv);
+
+            itemView.setOnClickListener(v -> {
+                int pos = getAdapterPosition();
+                listener.onItemClick(v, pos);
+            });
+        }
+
+        void bind(Post post) {
+            titleTv.setText(post.getTitle());
+            descriptionTv.setText(post.getDescription());
+            authorTv.setText(post.getAuthor());
+            thumbnailImv.setImageResource(post.getImg());
+        }
+    }
+
+    interface OnItemClickListener {
+        void onItemClick(View v, int position);
+    }
+
+    class PostAdapter extends RecyclerView.Adapter<PostViewHolder> {
+        OnItemClickListener listener;
+
+        public void setOnItemClickListener(OnItemClickListener listener) {
+            this.listener = listener;
+        }
+
+        @NonNull
+        @Override
+        public PostViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+            View view = getLayoutInflater().inflate(R.layout.post_row, parent, false);
+            PostViewHolder holder = new PostViewHolder(view, listener);
+            return holder;
+        }
+
+        @Override
+        public void onBindViewHolder(@NonNull PostViewHolder holder, int position) {
+            Post post = postsModel.getAllPosts().get(position);
+            holder.bind(post);
+        }
+
+        @Override
+        public int getItemCount() {
+            return 20;
+        }
+    }
+
+    @Override
+    public void onCreateOptionsMenu(@NonNull Menu menu, @NonNull MenuInflater inflater) {
+        super.onCreateOptionsMenu(menu, inflater);
+        inflater.inflate(R.menu.base_menu, menu);
+    }
+
+    //TODO: add onOptionsItemSelected
 }
