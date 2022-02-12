@@ -16,8 +16,7 @@
     <fragment
         android:id="@+id/postFragment"
         android:name="com.example.overcooked.post_page.PostFragment"
-        android:label="fragment_post"
-        tools:layout="@layout/fragment_post" >
+        tools:layout="@layout/fragment_post">
         <argument
             android:name="postId"
             app:argType="string" />

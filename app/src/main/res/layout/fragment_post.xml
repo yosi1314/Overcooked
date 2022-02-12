@@ -7,7 +7,7 @@
     android:background="#000000"
     android:padding="8sp"
     tools:context=".post_page.PostFragment">
-
+    <ScrollView android:layout_height="match_parent" android:layout_width="match_parent">
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -67,5 +67,6 @@
             android:text="TextView"
             android:textColor="#FFFFFF" />
     </LinearLayout>
+    </ScrollView>
 
 </androidx.constraintlayout.widget.ConstraintLayout>
