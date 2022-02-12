@@ -12,6 +12,8 @@ import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
+import androidx.navigation.NavDirections;
+import androidx.navigation.Navigation;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -40,10 +42,11 @@ public class FeedFragment extends Fragment {
         feed.setAdapter(postAdapter);
 
         postAdapter.setOnItemClickListener((v, position) -> {
-            int postId = postsModel.getAllPosts().get(position).getId();
-//                Navigation.findNavController(v).navigate(StudentListRvFragmentDirections.actionStudentListRvFragmentToStudentDetailsFragment(stId));
-            Log.d("TAG", "The post id is: " + postId);
+            String postId = postsModel.getAllPosts().get(position).getId();
+            Navigation.findNavController(v).navigate((NavDirections) FeedFragmentDirections.actionFeedFragmentToPostFragment(postId));
         });
+
+        setHasOptionsMenu(true);
 
         return view;
     }

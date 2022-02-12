@@ -1,27 +1,30 @@
 package com.example.overcooked.model;
 
 public class Post {
-    int id;
+    String id;
     String title = "";
     String description = "";
     String author = "";
     int img;
+
+    String content;
     public Post() { }
 
-    public int getId() {
+    public String getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(String id) {
         this.id = id;
     }
 
-    public Post(int id, String title, String description, String author, int img) {
+    public Post(String id, String title, String description, String author, int img, String content) {
         this.id = id;
         this.title = title;
         this.description = description;
         this.author = author;
         this.img = img;
+        this.content = content;
     }
 
     public String getTitle() {
@@ -54,6 +57,14 @@ public class Post {
 
     public void setImg(int img) {
         this.img = img;
+    }
+
+    public String getContent() {
+        return content;
+    }
+
+    public void setContent(String content) {
+        this.content = content;
     }
 
 
