@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "560594649578",
+    "project_id": "overcooked-java",
+    "storage_bucket": "overcooked-java.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:560594649578:android:f615d86aad62dd70b1b293",
+        "android_client_info": {
+          "package_name": "com.example.overcooked"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "560594649578-lgfhi908pvqdgr696icf4ml11k7qkoqq.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCfQwN_zy6fodiEo9PVanrFjL4tEbTzq74"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "560594649578-lgfhi908pvqdgr696icf4ml11k7qkoqq.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
