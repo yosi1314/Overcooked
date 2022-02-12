@@ -16,10 +16,10 @@ public class Model {
     public static Model instance = new Model();
     public Executor executor = Executors.newFixedThreadPool(1);
     public Handler mainThread = HandlerCompat.createAsync(Looper.getMainLooper());
-
+    public Firebase firebase = new Firebase();
 
     public boolean isSignedIn() {
-        return false;
+        return firebase.isUserSignedIn();
     }
 
     public List<Post> getAllPosts() {
