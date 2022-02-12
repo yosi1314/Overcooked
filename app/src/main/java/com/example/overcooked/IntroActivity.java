@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 
+import com.example.overcooked.feed.BaseActivity;
 import com.example.overcooked.login.LoginActivity;
 import com.example.overcooked.model.Model;
 
@@ -42,8 +43,8 @@ public class IntroActivity extends AppCompatActivity {
 
     private void toFeedActivity() {
         Log.d("TAG", "User needs to log in");
-//        Intent intent = new Intent(this, BaseActivity.class);
-//        startActivity(intent);
-//        finish();
+        Intent intent = new Intent(this, BaseActivity.class);
+        startActivity(intent);
+        finish();
     }
 }
