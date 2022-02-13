@@ -2,11 +2,13 @@ package com.example.overcooked.model;
 
 import android.util.Log;
 
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 
 public class Firebase {
-    private FirebaseAuth firebaseAuth = FirebaseAuth.getInstance();
+    private final FirebaseAuth firebaseAuth = FirebaseAuth.getInstance();
 
     public boolean isUserSignedIn() {
         FirebaseUser currentUser = firebaseAuth.getCurrentUser();
@@ -14,23 +16,14 @@ public class Firebase {
         return currentUser != null;
     }
 
-    public void signIn(String email, String password, Model.UserSignIn listener) {
+    public void signIn(String email, String password, Model.UserAuthentication listener) {
         firebaseAuth.signInWithEmailAndPassword(email, password)
-                .addOnCompleteListener(task -> {
-                    FirebaseUser user;
-                    if (task.isSuccessful()) {
-                        // Sign in success, update UI with the signed-in user's information
-                        Log.d("Login", "signInWithEmail:success");
-                        user = firebaseAuth.getCurrentUser();
-//                           updateUI(user);
-                    } else {
-                        // If sign in fails, display a message to the user.
-                        Log.w("Login", "signInWithEmail:failure", task.getException());
+                .addOnCompleteListener(task -> onAuthenticationComplete(task, listener));
+    }
 
-                        user = null;
-                    }
-                    listener.onComplete(user);
-                });
+    public void register(String email, String password, Model.UserAuthentication listener) {
+        firebaseAuth.createUserWithEmailAndPassword(email, password)
+                .addOnCompleteListener(task -> onAuthenticationComplete(task, listener));
     }
 
     public void signOut(Model.UserSignOut listener) {
@@ -38,4 +31,16 @@ public class Firebase {
         listener.onComplete();
     }
 
+    private void onAuthenticationComplete(Task<AuthResult> task, Model.UserAuthentication listener) {
+        FirebaseUser user;
+        if (task.isSuccessful()) {
+            Log.d("UserAuthentication", "signInWithEmail:success");
+            user = firebaseAuth.getCurrentUser();
+        } else {
+            Log.w("UserAuthentication", "signInWithEmail:failure", task.getException());
+            user = null;
+        }
+
+        listener.onComplete(user);
+    }
 }

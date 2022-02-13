@@ -49,15 +49,19 @@ public class Model {
         return null;
     }
 
-    public void signIn(String email, String password, UserSignIn listener) {
+    public void signIn(String email, String password, UserAuthentication listener) {
         firebase.signIn(email, password, listener);
+    }
+
+    public void signUp(String email, String password, UserAuthentication listener) {
+        firebase.register(email, password, listener);
     }
 
     public void signOut(UserSignOut listener) {
         firebase.signOut(listener);
     }
 
-    public interface UserSignIn {
+    public interface UserAuthentication {
         void onComplete(FirebaseUser user);
     }
 

@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="#000000"
-    tools:context=".login.LoginFragment">
+    tools:context=".login.RegisterFragment">
 
     <ImageView
         android:id="@+id/login_logo_imv"
@@ -39,7 +39,7 @@
             android:paddingTop="16dp">
 
             <com.google.android.material.textfield.TextInputEditText
-                android:id="@+id/login_email_tv"
+                android:id="@+id/register_email_tv"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:inputType="text"
@@ -54,7 +54,22 @@
             android:paddingTop="16dp">
 
             <com.google.android.material.textfield.TextInputEditText
-                android:id="@+id/login_password_tv"
+                android:id="@+id/register_password_tv"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:inputType="textPassword"
+                android:maxLines="1" />
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="4dp"
+            android:hint="@string/confirm_password"
+            android:paddingTop="16dp">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/register_confirm_password_tv"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:inputType="textPassword"
@@ -62,22 +77,22 @@
         </com.google.android.material.textfield.TextInputLayout>
 
         <com.google.android.material.button.MaterialButton
-            android:id="@+id/login_login_btn"
+            android:id="@+id/register_signup_btn"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_gravity="end"
             android:layout_marginTop="16dp"
-            android:text="@string/login"
+            android:text="@string/register"
             android:textColor="#000000"
             app:backgroundTint="@color/OvercookedYellow" />
 
         <TextView
-            android:id="@+id/login_signup_tv"
+            android:id="@+id/register_signin_tv"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="8dp"
             android:linksClickable="true"
-            android:text="@string/new_here_sign_up"
+            android:text="@string/welcome_back_sign_in"
             android:textAlignment="center"
             android:textColor="@color/white"
             android:textSize="16sp" />
