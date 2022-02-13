@@ -1,5 +1,6 @@
 package com.example.overcooked.feed;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -18,6 +19,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.overcooked.R;
+import com.example.overcooked.login.LoginActivity;
 import com.example.overcooked.model.Model;
 import com.example.overcooked.model.Post;
 
@@ -70,6 +72,7 @@ public class FeedFragment extends Fragment {
             });
         }
 
+
         void bind(Post post) {
             titleTv.setText(post.getTitle());
             descriptionTv.setText(post.getDescription());
@@ -114,6 +117,7 @@ public class FeedFragment extends Fragment {
         super.onCreateOptionsMenu(menu, inflater);
         inflater.inflate(R.menu.base_menu, menu);
     }
+
 
     //TODO: add onOptionsItemSelected
 }

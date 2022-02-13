@@ -52,7 +52,7 @@
             android:paddingTop="16dp">
 
             <com.google.android.material.textfield.TextInputEditText
-                android:id="@+id/login_email_et"
+                android:id="@+id/login_email_tv"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:inputType="text"
@@ -67,7 +67,7 @@
             android:paddingTop="16dp">
 
             <com.google.android.material.textfield.TextInputEditText
-                android:id="@+id/login_password_et"
+                android:id="@+id/login_password_tv"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:inputType="textPassword"

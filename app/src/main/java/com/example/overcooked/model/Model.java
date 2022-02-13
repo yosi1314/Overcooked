@@ -6,6 +6,7 @@ import android.os.Looper;
 import androidx.core.os.HandlerCompat;
 
 import com.example.overcooked.R;
+import com.google.firebase.auth.FirebaseUser;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -46,5 +47,21 @@ public class Model {
             return posts.get(3);
         }
         return null;
+    }
+
+    public void signIn(String email, String password, UserSignIn listener) {
+        firebase.signIn(email, password, listener);
+    }
+
+    public void signOut(UserSignOut listener) {
+        firebase.signOut(listener);
+    }
+
+    public interface UserSignIn {
+        void onComplete(FirebaseUser user);
+    }
+
+    public interface UserSignOut {
+        void onComplete();
     }
 }
