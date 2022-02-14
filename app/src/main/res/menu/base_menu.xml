@@ -1,4 +1,22 @@
 <?xml version="1.0" encoding="utf-8"?>
-<menu xmlns:android="http://schemas.android.com/apk/res/android">
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <group
+        android:id="@+id/group1"
+        android:checkableBehavior="single">
+        <item
+            android:id="@+id/menu_feed"
+            android:title="@string/feed" />
+        <item
+            android:id="@+id/menu_profile"
+            android:title="@string/profile" />
+        <item
+            android:id="@+id/menu_my_posts"
+            android:title="@string/my_posts" />
+        <item
+            android:id="@+id/menu_sign_out"
+            android:title="@string/sign_out" />
+    </group>
 
 </menu>

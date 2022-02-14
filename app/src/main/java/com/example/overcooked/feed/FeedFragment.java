@@ -34,6 +34,7 @@ public class FeedFragment extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_feed, container, false);
+       Log.d("Menuuu", "got here from menu");
 
         RecyclerView feed = view.findViewById(R.id.feed_rv);
         feed.setHasFixedSize(true);
@@ -112,11 +113,11 @@ public class FeedFragment extends Fragment {
         }
     }
 
-    @Override
-    public void onCreateOptionsMenu(@NonNull Menu menu, @NonNull MenuInflater inflater) {
-        super.onCreateOptionsMenu(menu, inflater);
-        inflater.inflate(R.menu.base_menu, menu);
-    }
+//    @Override
+//    public void onCreateOptionsMenu(@NonNull Menu menu, @NonNull MenuInflater inflater) {
+//        super.onCreateOptionsMenu(menu, inflater);
+//        inflater.inflate(R.menu.base_menu, menu);
+//    }
 
 
     //TODO: add onOptionsItemSelected

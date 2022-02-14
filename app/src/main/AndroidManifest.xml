@@ -11,7 +11,8 @@
         android:theme="@style/Theme.Overcooked">
         <activity
             android:name=".feed.BaseActivity"
-            android:exported="false" />
+            android:exported="false"
+            android:theme="@style/Theme.Overcooked.NoActionBar"/>
         <activity
             android:name=".login.LoginActivity"
             android:exported="false" />
