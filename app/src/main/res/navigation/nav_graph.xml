@@ -15,10 +15,18 @@
     </fragment>
     <fragment
         android:id="@+id/postFragment"
-        android:name="com.example.overcooked.post_page.PostFragment"
+        android:name="com.example.overcooked.posts.PostFragment"
         tools:layout="@layout/fragment_post">
         <argument
             android:name="postId"
             app:argType="string" />
     </fragment>
+    <fragment
+        android:id="@+id/createPostFragment"
+        android:name="com.example.overcooked.posts.CreatePostFragment"
+        android:label="fragment_create_post"
+        tools:layout="@layout/fragment_create_post" />
+    <action
+        android:id="@+id/action_global_createPostFragment"
+        app:destination="@id/createPostFragment" /><action android:id="@+id/action_global_feedFragment" app:destination="@id/feedFragment"/>
 </navigation>

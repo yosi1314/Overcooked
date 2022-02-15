@@ -17,4 +17,5 @@
     <string name="overcooked">Overcooked</string>
     <string name="navigation_drawer_open">Open</string>
     <string name="navigation_drawer_close">Closed</string>
+    <string name="new_post">New Post</string>
 </resources>

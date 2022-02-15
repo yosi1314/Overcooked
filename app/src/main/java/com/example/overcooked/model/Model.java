@@ -22,31 +22,41 @@ public class Model {
 
     private List<Post> posts;
 
+    private Model(){}
+
+    public String getCurrentUserUID(){
+        return firebase.getCurrentUserUID();
+    }
+
     public boolean isSignedIn() {
         return firebase.isUserSignedIn();
     }
 
-    public List<Post> getAllPosts() {
-        if(posts != null) return posts;
-        posts = new ArrayList<Post>();
-        for(int i=0; i<20; i++){
-            posts.add(
-                    new Post("" + i,
-                            "Title" + i,
-                            "Description" + i,
-                            "Author" + i,
-                            R.drawable.main_logo,
-                            "content" + i)
-            );
-        }
-        return posts;
+    public void getAllPosts(GetAllPostsListener listener) {
+        executor.execute(() -> {
+            List<Post> posts = LocalDb.db.postDao().getAll();
+            mainThread.post(() -> {
+                listener.onComplete(posts);
+            });
+        });
     }
 
-    public Post getPostById(String id) {
-        if (posts != null) {
-            return posts.get(3);
-        }
-        return null;
+    public void addPost(Post post, Model.AddPostListener listener){
+        executor.execute(() -> {
+            LocalDb.db.postDao().insertAll(post);;
+            mainThread.post(() -> {
+                listener.onComplete();
+            });
+        });
+    }
+
+    public void getPostById(String id, Model.GetPostByIdListener listener) {
+        executor.execute(() -> {
+            Post post = LocalDb.db.postDao().getPostById(id);
+            mainThread.post(() -> {
+                listener.onComplete(post);
+            });
+        });
     }
 
     public void signIn(String email, String password, UserAuthentication listener) {
@@ -67,5 +77,21 @@ public class Model {
 
     public interface UserSignOut {
         void onComplete();
+    }
+
+    public interface GetPostsListener {
+        void onComplete(List<Post> posts);
+    }
+
+    public interface GetAllPostsListener {
+        void onComplete(List<Post> posts);
+    }
+
+    public interface AddPostListener {
+        void onComplete();
+    }
+
+    public interface GetPostByIdListener {
+        void onComplete(Post post);
     }
 }

@@ -9,7 +9,9 @@ import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
 import androidx.navigation.NavController;
+import androidx.navigation.NavDirections;
 import androidx.navigation.NavHost;
+import androidx.navigation.Navigation;
 import androidx.navigation.ui.AppBarConfiguration;
 import androidx.navigation.ui.NavigationUI;
 
@@ -29,6 +31,8 @@ import com.google.android.material.navigation.NavigationView;
 public class BaseActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
     NavController navCtl;
     DrawerLayout drawerLayout;
+
+    NavHost navHost;
     IntentHelper intentHelper = new IntentHelper();
 
     @Override
@@ -36,7 +40,7 @@ public class BaseActivity extends AppCompatActivity implements NavigationView.On
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_base);
 
-        NavHost navHost = (NavHost) getSupportFragmentManager().findFragmentById(R.id.base_navhost);
+        navHost = (NavHost) getSupportFragmentManager().findFragmentById(R.id.base_navhost);
         navCtl = navHost.getNavController();
 
         Toolbar toolbar = findViewById(R.id.toolbar);
@@ -75,22 +79,33 @@ public class BaseActivity extends AppCompatActivity implements NavigationView.On
     public boolean onNavigationItemSelected(@NonNull MenuItem item) {
         Fragment fragment = null;
         switch (item.getItemId()) {
-            case R.id.menu_feed:
-                fragment = new FeedFragment();
-                break;
-            case R.id.menu_my_posts:
-                break;
-            case R.id.menu_profile:
+//            case R.id.menu_feed:
+//                fragment = new FeedFragment();
+//                break;
+//            case R.id.menu_my_posts:
+//                break;
+//            case R.id.menu_profile:
+//                break;
+//            case R.id.createPostFragment:
+////                Navigation.findNavController(navHost).navigate(R.id.action_global_createPostFragment);
+//                NavigationUI.onNavDestinationSelected(item, navCtl);
+//                break;
+            case android.R.id.home:
+                navCtl.navigateUp();
                 break;
             case R.id.menu_sign_out:
                 Model.instance.signOut(() -> toLoginActivity());
                 break;
+            default:
+                NavigationUI.onNavDestinationSelected(item, navCtl);
+                break;
+
         }
 
-        if (fragment != null) {
-            getSupportFragmentManager().beginTransaction().replace(R.id.base_navhost,
-                    fragment).commit();
-        }
+//        if (fragment != null) {
+//            getSupportFragmentManager().beginTransaction().replace(R.id.base_navhost,
+//                    fragment).commit();
+//        }
 
         drawerLayout.closeDrawer(GravityCompat.START);
         return true;

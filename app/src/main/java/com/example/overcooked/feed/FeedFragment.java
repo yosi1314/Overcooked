@@ -23,9 +23,12 @@ import com.example.overcooked.login.LoginActivity;
 import com.example.overcooked.model.Model;
 import com.example.overcooked.model.Post;
 
+import java.util.List;
+
 
 public class FeedFragment extends Fragment {
 
+    List<Post> posts;
     Model postsModel = Model.instance;
     PostAdapter postAdapter;
 
@@ -34,7 +37,6 @@ public class FeedFragment extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_feed, container, false);
-       Log.d("Menuuu", "got here from menu");
 
         RecyclerView feed = view.findViewById(R.id.feed_rv);
         feed.setHasFixedSize(true);
@@ -45,13 +47,20 @@ public class FeedFragment extends Fragment {
         feed.setAdapter(postAdapter);
 
         postAdapter.setOnItemClickListener((v, position) -> {
-            String postId = postsModel.getAllPosts().get(position).getId();
+            String postId = posts.get(position).getId();
             Navigation.findNavController(v).navigate((NavDirections) FeedFragmentDirections.actionFeedFragmentToPostFragment(postId));
         });
 
         setHasOptionsMenu(true);
-
+        refresh();
         return view;
+    }
+
+    private void refresh() {
+        postsModel.getAllPosts((list) -> {
+            posts = list;
+            postAdapter.notifyDataSetChanged();
+        });
     }
 
     class PostViewHolder extends RecyclerView.ViewHolder {
@@ -73,12 +82,11 @@ public class FeedFragment extends Fragment {
             });
         }
 
-
         void bind(Post post) {
             titleTv.setText(post.getTitle());
             descriptionTv.setText(post.getDescription());
             authorTv.setText(post.getAuthor());
-            thumbnailImv.setImageResource(post.getImg());
+            thumbnailImv.setImageResource(R.drawable.main_logo);
         }
     }
 
@@ -103,13 +111,16 @@ public class FeedFragment extends Fragment {
 
         @Override
         public void onBindViewHolder(@NonNull PostViewHolder holder, int position) {
-            Post post = postsModel.getAllPosts().get(position);
+            Post post = posts.get(position);
             holder.bind(post);
         }
 
         @Override
         public int getItemCount() {
-            return 20;
+            if(posts == null){
+                return 0;
+            }
+            return posts.size();
         }
     }
 
