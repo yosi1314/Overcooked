@@ -13,6 +13,7 @@ import android.widget.TextView;
 import com.example.overcooked.R;
 import com.example.overcooked.model.Model;
 import com.example.overcooked.model.Post;
+import com.squareup.picasso.Picasso;
 
 public class PostFragment extends Fragment {
 
@@ -47,7 +48,11 @@ public class PostFragment extends Fragment {
     }
 
     private void setPostData() {
-        post_image_view.setImageResource(R.drawable.main_logo);
+        if(post.getImg() != null){
+            Picasso.get().load(post.getImg()).into(post_image_view);
+        } else {
+            post_image_view.setImageResource(R.drawable.main_logo);
+        }
         post_title.setText(post.getTitle());
         post_description.setText(post.getDescription());
         post_author.setText(post.getAuthor());

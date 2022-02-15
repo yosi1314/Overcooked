@@ -20,18 +20,17 @@ public class Post {
     String description = "";
     String author = "";
     String content = "";
-    int img;
-//    Long updateDate = new Long(0);
+    String img;
+    Long updateDate = new Long(0);
 
 
     public Post() { }
 
-    public Post(String id, String title, String description, String author, int img, String content) {
+    public Post(String id, String title, String description, String author, String content) {
         this.id = id;
         this.title = title;
         this.description = description;
         this.author = author;
-        this.img = img;
         this.content = content;
     }
 
@@ -67,11 +66,11 @@ public class Post {
         this.author = author;
     }
 
-    public int getImg() {
+    public String getImg() {
         return img;
     }
 
-    public void setImg(int img) {
+    public void setImg(String img) {
         this.img = img;
     }
 
@@ -83,13 +82,13 @@ public class Post {
         this.content = content;
     }
 
-//    public Long getUpdateDate() {
-//        return updateDate;
-//    }
+    public Long getUpdateDate() {
+        return updateDate;
+    }
 
-//    public void setUpdateDate(Long updateDate) {
-//        this.updateDate = updateDate;
-//    }
+    public void setUpdateDate(Long updateDate) {
+        this.updateDate = updateDate;
+    }
 
     public Map<String, Object> toJson() {
         Map<String, Object> json = new HashMap<String, Object>();
@@ -112,10 +111,10 @@ public class Post {
         String author = (String) json.get("author");
         Timestamp ts = (Timestamp)json.get("updateDate");
         Long updateDate = ts.getSeconds();
-        int img = (int)json.get("image");
+        String img = (String)json.get("image");
 
-        Post post = new Post(id, title, desc, author, img, content);
-//        post.setUpdateDate(updateDate);
+        Post post = new Post(id, title, desc, author, content);
+        post.setUpdateDate(updateDate);
         post.setImg(img);
         return post;
     }

@@ -48,32 +48,42 @@
                 app:layout_constraintTop_toBottomOf="@+id/create_post_imv">
 
                 <com.google.android.material.textfield.TextInputLayout
+                    style="@style/Overcooked.TextInputLayoutStyle"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_margin="4dp"
                     android:hint="Title"
-                    android:paddingTop="16dp">
+                    android:paddingTop="16dp"
+                    android:textColorHint="@color/white"
+                    app:hintTextColor="@color/white">
+
 
                     <com.google.android.material.textfield.TextInputEditText
                         android:id="@+id/create_post_title_tv"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:inputType="text"
-                        android:maxLines="1" />
+                        android:maxLines="1"
+                        android:textColor="#FFFFFF"
+                        android:textCursorDrawable="@null" />
                 </com.google.android.material.textfield.TextInputLayout>
 
                 <com.google.android.material.textfield.TextInputLayout
+                    style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_margin="4dp"
                     android:hint="Description"
-                    android:paddingTop="16dp">
+                    android:paddingTop="16dp"
+                    android:textColorHint="@color/white"
+                    app:hintTextColor="@color/white">
+
 
                     <com.google.android.material.textfield.TextInputEditText
                         android:id="@+id/create_post_description_tv"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:inputType="textPassword"
+                        android:inputType="text"
                         android:maxLines="1" />
                 </com.google.android.material.textfield.TextInputLayout>
 
@@ -82,19 +92,20 @@
         </androidx.appcompat.widget.LinearLayoutCompat>
 
         <com.google.android.material.textfield.TextInputLayout
+            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_margin="4dp"
             android:hint="Insert your recipe here..."
-            android:paddingTop="16dp">
+            android:paddingTop="16dp"
+            android:textColorHint="@color/white"
+            app:hintTextColor="@color/white">
 
             <EditText
                 android:id="@+id/create_post_content_tv"
                 android:layout_width="match_parent"
                 android:layout_height="300dp"
-                android:background="#FFFFFF"
                 android:gravity="top"
-                android:hint="Insert your recipe here..."
                 android:inputType="textMultiLine"
                 android:overScrollMode="ifContentScrolls"
                 android:scrollbarStyle="insideInset"

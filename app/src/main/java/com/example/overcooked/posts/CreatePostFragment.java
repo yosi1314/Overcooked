@@ -1,7 +1,14 @@
 package com.example.overcooked.posts;
 
+import android.app.Activity;
+import android.content.Intent;
+import android.graphics.Bitmap;
 import android.os.Bundle;
 
+import androidx.activity.result.ActivityResult;
+import androidx.activity.result.ActivityResultCallback;
+import androidx.activity.result.contract.ActivityResultContracts;
+import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.navigation.Navigation;
 
@@ -10,6 +17,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.ProgressBar;
 
 import com.example.overcooked.R;
@@ -18,9 +26,13 @@ import com.example.overcooked.model.Post;
 
 
 public class CreatePostFragment extends Fragment {
+    private static final int REQUEST_CAMERA = 1;
+    private static final int REQUEST_GALLERY = 2;
     EditText titleEt;
     EditText descriptionEt;
     EditText contentEt;
+    ImageView imageImv;
+    Bitmap imageBitmap;
     Button createBtn;
     ProgressBar progressBar;
 
@@ -32,9 +44,14 @@ public class CreatePostFragment extends Fragment {
         titleEt = view.findViewById(R.id.create_post_title_tv);
         descriptionEt = view.findViewById(R.id.create_post_description_tv);
         contentEt = view.findViewById(R.id.create_post_content_tv);
+        imageImv = view.findViewById(R.id.create_post_imv);
         createBtn = view.findViewById(R.id.create_post_done_btn);
         progressBar = view.findViewById(R.id.create_post_progress_bar);
         progressBar.setVisibility(View.GONE);
+
+        imageImv.setOnClickListener(v -> {
+            openGallery();
+        });
 
         createBtn.setOnClickListener(v -> {
             create();
@@ -43,6 +60,40 @@ public class CreatePostFragment extends Fragment {
 
         return view;
     }
+
+    private void openGallery() {
+        Intent intent = new Intent();
+        intent.setAction(Intent.ACTION_VIEW);
+        intent.setType("image/*");
+        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+//        startActivityForResult(intent, REQUEST_GALLERY);
+        registerForActivityResult(
+            new ActivityResultContracts.StartActivityForResult(),
+            result -> {
+                int resultCode = result.getResultCode();
+                if (resultCode == REQUEST_GALLERY) {
+                    if (resultCode == Activity.RESULT_OK) {
+                        Bundle extras = result.getData().getExtras();
+                        imageBitmap = (Bitmap) extras.get("data");
+                        imageImv.setImageBitmap(imageBitmap);
+                    }
+                }
+            }
+        );
+    }
+
+
+//    @Override
+//    public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+//        super.onActivityResult(requestCode, resultCode, data);
+//        if (requestCode == REQUEST_GALLERY) {
+//            if (resultCode == Activity.RESULT_OK) {
+//                Bundle extras = data.getExtras();
+//                imageBitmap = (Bitmap) extras.get("data");
+//                imageImv.setImageBitmap(imageBitmap);
+//            }
+//        }
+//    }
 
     private void create() {
         progressBar.setVisibility(View.VISIBLE);
@@ -53,10 +104,19 @@ public class CreatePostFragment extends Fragment {
         String author = Model.instance.getCurrentUserUID();
         String id = java.util.UUID.randomUUID().toString();
 
-        Post post = new Post(id, title, description, author, R.drawable.main_logo, content);
+        Post post = new Post(id, title, description, author, content);
+        if(imageBitmap != null){
+            Model.instance.uploadImage(imageBitmap, id + ".jpg", url -> {
+                post.setImg(url);
+                Model.instance.addPost(post, () -> {
+                    Navigation.findNavController(titleEt).navigateUp();
+                });
+            });
+        } else {
+            Model.instance.addPost(post, () -> {
+                Navigation.findNavController(titleEt).navigateUp();
+            });
+        }
 
-        Model.instance.addPost(post, () -> {
-            Navigation.findNavController(titleEt).navigateUp();
-        });
     }
 }

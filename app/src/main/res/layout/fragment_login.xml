@@ -36,13 +36,16 @@
             android:layout_height="wrap_content"
             android:layout_margin="4dp"
             android:hint="@string/email"
-            android:paddingTop="16dp">
+            android:paddingTop="16dp"
+            app:hintTextColor="@color/white"
+            android:textColorHint="@color/white"
+            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox">
 
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/login_email_tv"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:inputType="text"
+                android:inputType="textEmailAddress"
                 android:maxLines="1" />
         </com.google.android.material.textfield.TextInputLayout>
 
@@ -51,7 +54,10 @@
             android:layout_height="wrap_content"
             android:layout_margin="4dp"
             android:hint="@string/password"
-            android:paddingTop="16dp">
+            android:paddingTop="16dp"
+            app:hintTextColor="@color/white"
+            android:textColorHint="@color/white"
+            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox">
 
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/login_password_tv"

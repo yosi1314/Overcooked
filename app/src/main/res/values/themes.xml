@@ -14,6 +14,10 @@
         <!-- Customize your theme here. -->
     </style>
 
+    <style name="Overcooked.TextInputLayoutStyle" parent="Widget.MaterialComponents.TextInputLayout.OutlinedBox">
+        <item name="boxStrokeColor">@color/text_input_box_stroke</item>
+    </style>
+
     <style name="Theme.Overcooked.NoActionBar">
         <item name="windowActionBar">false</item>
         <item name="windowNoTitle">true</item>

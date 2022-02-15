@@ -1,5 +1,6 @@
 package com.example.overcooked.feed;
 
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
@@ -13,15 +14,18 @@ import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.ViewModelProvider;
 import androidx.navigation.NavDirections;
 import androidx.navigation.Navigation;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import com.example.overcooked.R;
 import com.example.overcooked.login.LoginActivity;
 import com.example.overcooked.model.Model;
 import com.example.overcooked.model.Post;
+import com.squareup.picasso.Picasso;
 
 import java.util.List;
 
@@ -29,14 +33,25 @@ import java.util.List;
 public class FeedFragment extends Fragment {
 
     List<Post> posts;
+    FeedViewModel viewModel;
     Model postsModel = Model.instance;
     PostAdapter postAdapter;
+    SwipeRefreshLayout swipeRefresh;
+
+    @Override
+    public void onAttach(@NonNull Context context) {
+        super.onAttach(context);
+        viewModel = new ViewModelProvider(this).get(FeedViewModel.class);
+    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_feed, container, false);
+
+        swipeRefresh = view.findViewById(R.id.feed_swiperefresh);
+        swipeRefresh.setOnRefreshListener(() -> Model.instance.refreshPostsList());
 
         RecyclerView feed = view.findViewById(R.id.feed_rv);
         feed.setHasFixedSize(true);
@@ -47,20 +62,23 @@ public class FeedFragment extends Fragment {
         feed.setAdapter(postAdapter);
 
         postAdapter.setOnItemClickListener((v, position) -> {
-            String postId = posts.get(position).getId();
-            Navigation.findNavController(v).navigate((NavDirections) FeedFragmentDirections.actionFeedFragmentToPostFragment(postId));
+            String postId = viewModel.getPosts().getValue().get(position).getId();
+            Navigation.findNavController(v).navigate(FeedFragmentDirections.actionFeedFragmentToPostFragment(postId));
         });
 
         setHasOptionsMenu(true);
-        refresh();
+
+        viewModel.getPosts().observe(getViewLifecycleOwner(), postList -> refresh());
+        swipeRefresh.setRefreshing(Model.instance.getPostListLoadingState().getValue() == Model.PostListLoadingState.loading);
+        Model.instance.getPostListLoadingState().observe(getViewLifecycleOwner(), postListLoadingState -> {
+            swipeRefresh.setRefreshing(postListLoadingState == Model.PostListLoadingState.loading);
+        });
+
         return view;
     }
 
     private void refresh() {
-        postsModel.getAllPosts((list) -> {
-            posts = list;
-            postAdapter.notifyDataSetChanged();
-        });
+        postAdapter.notifyDataSetChanged();
     }
 
     class PostViewHolder extends RecyclerView.ViewHolder {
@@ -87,6 +105,11 @@ public class FeedFragment extends Fragment {
             descriptionTv.setText(post.getDescription());
             authorTv.setText(post.getAuthor());
             thumbnailImv.setImageResource(R.drawable.main_logo);
+            if (post.getImg() != null){
+                Picasso.get()
+                        .load(post.getImg())
+                        .into(thumbnailImv);
+            }
         }
     }
 
@@ -111,25 +134,17 @@ public class FeedFragment extends Fragment {
 
         @Override
         public void onBindViewHolder(@NonNull PostViewHolder holder, int position) {
-            Post post = posts.get(position);
+            Post post = viewModel.getPosts().getValue().get(position);
             holder.bind(post);
         }
 
         @Override
         public int getItemCount() {
-            if(posts == null){
+            List<Post> data = viewModel.getPosts().getValue();
+            if (data == null) {
                 return 0;
             }
-            return posts.size();
+            return data.size();
         }
     }
-
-//    @Override
-//    public void onCreateOptionsMenu(@NonNull Menu menu, @NonNull MenuInflater inflater) {
-//        super.onCreateOptionsMenu(menu, inflater);
-//        inflater.inflate(R.menu.base_menu, menu);
-//    }
-
-
-    //TODO: add onOptionsItemSelected
 }
