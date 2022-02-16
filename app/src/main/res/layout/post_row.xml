@@ -38,7 +38,7 @@
             <ImageView
                 android:id="@+id/post_image_imv"
                 android:layout_width="match_parent"
-                android:layout_height="194dp"
+                android:layout_height="200dp"
                 android:contentDescription="TextView"
                 android:scaleType="centerCrop"
                 app:srcCompat="@drawable/main_logo" />
@@ -56,7 +56,8 @@
                     android:layout_height="wrap_content"
                     android:text="Title"
                     android:textAppearance="?attr/textAppearanceHeadline6"
-                    android:textColor="#FFFFFF" />
+                    android:textColor="#FFFFFF"
+                    android:textSize="24sp" />
 
                 <TextView
                     android:id="@+id/post_desc_tv"
@@ -65,17 +66,8 @@
                     android:layout_marginTop="8dp"
                     android:text="Description"
                     android:textAppearance="?attr/textAppearanceBody2"
-                    android:textColor="#FFFFFF" />
-
-                <TextView
-                    android:id="@+id/post_author_tv"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="16dp"
-                    android:text="Author"
-                    android:textAlignment="viewEnd"
-                    android:textAppearance="?attr/textAppearanceBody2"
-                    android:textColor="#FFFFFF" />
+                    android:textColor="#FFFFFF"
+                    android:textSize="18sp" />
 
             </LinearLayout>
         </LinearLayout>

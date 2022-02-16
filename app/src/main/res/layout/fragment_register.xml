@@ -7,15 +7,18 @@
     android:background="#000000"
     tools:context=".login.RegisterFragment">
 
+
+
     <ImageView
-        android:id="@+id/login_logo_imv"
-        android:layout_width="0dp"
-        android:layout_height="0dp"
+        android:id="@+id/register_image_imv"
+        android:layout_width="150dp"
+        android:layout_height="150dp"
         android:layout_marginStart="8dp"
-        android:layout_marginTop="8dp"
+        android:layout_marginTop="28dp"
         android:layout_marginEnd="8dp"
         app:layout_constraintDimensionRatio="16:9"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.497"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:srcCompat="@drawable/main_logo" />
@@ -25,72 +28,92 @@
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_margin="30dp"
-        android:layout_marginTop="16dp"
+        android:layout_marginTop="4dp"
         android:orientation="vertical"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/login_logo_imv">
+        app:layout_constraintTop_toBottomOf="@+id/register_image_imv">
 
         <com.google.android.material.textfield.TextInputLayout
+            style="@style/Overcooked.TextInputLayoutStyle"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="4dp"
+            android:hint="@string/display_name"
+            android:paddingTop="16dp"
+            android:textColorHint="@color/white"
+            app:hintTextColor="@color/white">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/register_display_name_tv"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:inputType="text"
+                android:maxLines="1"
+                android:textColor="#FFFFFF"
+                android:textCursorDrawable="@null" />
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <com.google.android.material.textfield.TextInputLayout
+            style="@style/Overcooked.TextInputLayoutStyle"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_margin="4dp"
             android:hint="@string/email"
             android:paddingTop="16dp"
             android:textColorHint="@color/white"
-            app:hintTextColor="@color/white"
-            style="@style/Overcooked.TextInputLayoutStyle">
+            app:hintTextColor="@color/white">
 
 
-        <com.google.android.material.textfield.TextInputEditText
+            <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/register_email_tv"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:inputType="textEmailAddress"
-                android:textCursorDrawable="@null"
+                android:maxLines="1"
                 android:textColor="#FFFFFF"
-                android:maxLines="1" />
+                android:textCursorDrawable="@null" />
         </com.google.android.material.textfield.TextInputLayout>
 
         <com.google.android.material.textfield.TextInputLayout
+            style="@style/Overcooked.TextInputLayoutStyle"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_margin="4dp"
             android:hint="@string/password"
             android:paddingTop="16dp"
             android:textColorHint="@color/white"
-            app:hintTextColor="@color/white"
-            style="@style/Overcooked.TextInputLayoutStyle">
+            app:hintTextColor="@color/white">
 
 
-        <com.google.android.material.textfield.TextInputEditText
+            <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/register_password_tv"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:inputType="textPassword"
-                android:textCursorDrawable="@null"
+                android:maxLines="1"
                 android:textColor="#FFFFFF"
-                android:maxLines="1" />
+                android:textCursorDrawable="@null" />
         </com.google.android.material.textfield.TextInputLayout>
 
         <com.google.android.material.textfield.TextInputLayout
+            style="@style/Overcooked.TextInputLayoutStyle"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_margin="4dp"
             android:hint="@string/confirm_password"
             android:paddingTop="16dp"
             android:textColorHint="@color/white"
-            app:hintTextColor="@color/white"
-            style="@style/Overcooked.TextInputLayoutStyle">
+            app:hintTextColor="@color/white">
 
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/register_confirm_password_tv"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:inputType="textPassword"
+                android:maxLines="1"
                 android:textColor="#FFFFFF"
-                android:textCursorDrawable="@null"
-                android:maxLines="1" />
+                android:textCursorDrawable="@null" />
         </com.google.android.material.textfield.TextInputLayout>
 
         <com.google.android.material.button.MaterialButton

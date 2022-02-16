@@ -32,9 +32,7 @@ import java.util.List;
 
 public class FeedFragment extends Fragment {
 
-    List<Post> posts;
     FeedViewModel viewModel;
-    Model postsModel = Model.instance;
     PostAdapter postAdapter;
     SwipeRefreshLayout swipeRefresh;
 
@@ -84,14 +82,12 @@ public class FeedFragment extends Fragment {
     class PostViewHolder extends RecyclerView.ViewHolder {
         TextView titleTv;
         TextView descriptionTv;
-        TextView authorTv;
         ImageView thumbnailImv;
 
         public PostViewHolder(@NonNull View itemView, OnItemClickListener listener) {
             super(itemView);
             titleTv = itemView.findViewById(R.id.post_title_tv);
             descriptionTv = itemView.findViewById(R.id.post_desc_tv);
-            authorTv = itemView.findViewById(R.id.post_author_tv);
             thumbnailImv = itemView.findViewById(R.id.post_image_imv);
 
             itemView.setOnClickListener(v -> {
@@ -103,7 +99,6 @@ public class FeedFragment extends Fragment {
         void bind(Post post) {
             titleTv.setText(post.getTitle());
             descriptionTv.setText(post.getDescription());
-            authorTv.setText(post.getAuthor());
             if (post.getImg() != null){
                 Picasso.get()
                         .load(post.getImg())

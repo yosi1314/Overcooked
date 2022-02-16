@@ -6,12 +6,16 @@ import android.util.Log;
 
 import androidx.annotation.NonNull;
 
+import com.example.overcooked.R;
 import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.Timestamp;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.auth.UserProfileChangeRequest;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.FirebaseFirestoreSettings;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
@@ -62,6 +66,15 @@ public class Firebase {
                 .addOnFailureListener(e -> listener.onComplete());
     }
 
+    public void createUser(User user, Model.AddUserListener listener){
+        Map<String, Object> json = user.toJson();
+        db.collection(User.COLLECTION_NAME)
+                .document(user.getUid())
+                .set(json)
+                .addOnSuccessListener(unused -> listener.onComplete())
+                .addOnFailureListener(e -> listener.onComplete());
+    }
+
     public String getCurrentUserUID() {
         return firebaseAuth.getUid();
     }
@@ -102,9 +115,9 @@ public class Firebase {
 
     FirebaseStorage storage = FirebaseStorage.getInstance();
 
-    public void uploadImage(Bitmap imageBitmap, String imageName, Model.UploadImageListener listener) {
+    public void uploadImage(Bitmap imageBitmap, String imageName, String storageLocation, Model.UploadImageListener listener) {
         StorageReference storageReference = storage.getReference();
-        StorageReference imageReference = storageReference.child("post_thumbnails/" + imageName);
+        StorageReference imageReference = storageReference.child(storageLocation + imageName);
 
         ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
         imageBitmap.compress(Bitmap.CompressFormat.JPEG, 100, outputStream);
@@ -116,5 +129,9 @@ public class Firebase {
                     Uri downloadUrl = uri;
                     listener.onComplete(downloadUrl.toString());
                 }));
+    }
+
+    public void updateUser(User user, Model.UpdateUserListener listener) {
+
     }
 }

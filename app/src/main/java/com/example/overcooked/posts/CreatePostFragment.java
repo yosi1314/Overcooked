@@ -1,15 +1,10 @@
 package com.example.overcooked.posts;
 
 import android.app.Activity;
-import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.os.Bundle;
 
-import androidx.activity.result.ActivityResult;
-import androidx.activity.result.ActivityResultCallback;
-import androidx.activity.result.contract.ActivityResultContracts;
-import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.navigation.Navigation;
@@ -18,7 +13,6 @@ import android.provider.MediaStore;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -129,7 +123,7 @@ public class CreatePostFragment extends Fragment {
 
         Post post = new Post(id, title, description, author, content);
         if(imageBitmap != null){
-            Model.instance.uploadImage(imageBitmap, id + ".jpg", url -> {
+            Model.instance.uploadImage(imageBitmap, id + ".jpg", getString(R.string.storage_posts), url -> {
                 post.setImg(url);
                 Model.instance.addPost(post, () -> {
                     Navigation.findNavController(titleEt).navigateUp();

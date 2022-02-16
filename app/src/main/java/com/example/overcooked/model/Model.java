@@ -11,10 +11,8 @@ import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 
 import com.example.overcooked.MyApplication;
-import com.example.overcooked.R;
 import com.google.firebase.auth.FirebaseUser;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.Executor;
 import java.util.concurrent.Executors;
@@ -106,6 +104,16 @@ public class Model {
         });
     }
 
+    public void createUser(User user, Model.AddUserListener listener) {
+        firebase.createUser(user, () -> {
+            listener.onComplete();
+        });
+    }
+
+    public void updateUser(String displayName, String imageUrl, Model.UpdateUserListener listener) {
+//        firebase.updateUser(displayName, imageUrl, listener);
+    }
+
     public void addPost(Post post, Model.AddPostListener listener) {
         firebase.addPost(post, () -> {
             listener.onComplete();
@@ -122,8 +130,8 @@ public class Model {
         });
     }
 
-    public void uploadImage(Bitmap imageBitmap, String imageName, Model.UploadImageListener listener) {
-        firebase.uploadImage(imageBitmap, imageName, listener);
+    public void uploadImage(Bitmap imageBitmap, String imageName, String storageLocation, Model.UploadImageListener listener) {
+        firebase.uploadImage(imageBitmap, imageName, storageLocation, listener);
     }
 
     public void signIn(String email, String password, UserAuthentication listener) {
@@ -164,5 +172,13 @@ public class Model {
 
     public interface UploadImageListener {
         void onComplete(String url);
+    }
+
+    public interface AddUserListener {
+        void onComplete();
+    }
+
+    public interface UpdateUserListener {
+        void onComplete();
     }
 }
