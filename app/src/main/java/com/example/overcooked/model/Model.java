@@ -110,8 +110,8 @@ public class Model {
         });
     }
 
-    public void updateUser(String displayName, String imageUrl, Model.UpdateUserListener listener) {
-//        firebase.updateUser(displayName, imageUrl, listener);
+    public void updateUser(User user, Model.UpdateUserListener listener) {
+        firebase.updateUser(user, listener);
     }
 
     public void addPost(Post post, Model.AddPostListener listener) {

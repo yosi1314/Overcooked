@@ -1,0 +1,148 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#000000"
+    tools:context=".profile.EditProfileFragment">
+
+    <ImageView
+        android:id="@+id/edit_profile_image_imv"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        app:layout_constraintDimensionRatio="16:9"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.497"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:srcCompat="@drawable/main_logo" />
+
+    <com.google.android.flexbox.FlexboxLayout
+        android:id="@+id/flexboxLayout2"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:justifyContent="center"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="1.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/edit_profile_image_imv">
+
+        <com.google.android.material.floatingactionbutton.FloatingActionButton
+            android:id="@+id/edit_button_gallery_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="16dp"
+            android:layout_marginEnd="92dp"
+            android:layout_marginBottom="16dp"
+            android:textSize="24sp"
+            android:tint="@color/white"
+            app:backgroundTint="@color/OvercookedYellow"
+            app:fabSize="mini"
+            app:layout_constraintBottom_toBottomOf="@+id/register_image_imv"
+            app:layout_constraintEnd_toStartOf="@+id/edit_profile_camera_button"
+            app:srcCompat="@android:drawable/ic_menu_gallery"
+            tools:ignore="SpeakableTextPresentCheck" />
+
+        <com.google.android.material.floatingactionbutton.FloatingActionButton
+            android:id="@+id/edit_button_camera_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="16dp"
+            android:layout_marginEnd="92dp"
+            android:layout_marginBottom="16dp"
+            android:textSize="24sp"
+            android:tint="@color/white"
+            app:backgroundTint="@color/OvercookedYellow"
+            app:fabSize="mini"
+            app:layout_constraintBottom_toBottomOf="@+id/register_image_imv"
+            app:layout_constraintEnd_toStartOf="@+id/edit_profile_camera_button"
+            app:srcCompat="@android:drawable/ic_menu_camera"
+            tools:ignore="SpeakableTextPresentCheck" />
+
+    </com.google.android.flexbox.FlexboxLayout>
+
+    <androidx.appcompat.widget.LinearLayoutCompat
+        android:id="@+id/linearLayoutCompat"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_margin="10dp"
+        android:orientation="vertical"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/flexboxLayout2">
+
+        <com.google.android.material.textfield.TextInputLayout
+            style="@style/Overcooked.TextInputLayoutStyle"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="4dp"
+            android:hint="@string/display_name"
+            android:paddingTop="16dp"
+            android:textColorHint="@color/white"
+            app:hintTextColor="@color/white">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/edit_profile_display_name_et"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:inputType="text"
+                android:maxLines="1"
+                android:textColor="#FFFFFF"
+                android:textCursorDrawable="@null"/>
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <com.google.android.material.textfield.TextInputLayout
+            style="@style/Overcooked.TextInputLayoutStyle"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="4dp"
+            android:hint="@string/email"
+            android:paddingTop="16dp"
+            android:textColorHint="@color/white"
+            app:hintTextColor="@color/white">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/edit_profile_email_et"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:enabled="false"
+                android:inputType="textEmailAddress"
+                android:maxLines="1"
+                android:textColor="#FFFFFF"
+                android:textCursorDrawable="@null"/>
+
+        </com.google.android.material.textfield.TextInputLayout>
+
+    </androidx.appcompat.widget.LinearLayoutCompat>
+
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/edit_profile_save_button"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="end"
+        android:text="@string/save"
+        android:textColor="#000000"
+        app:backgroundTint="@color/OvercookedYellow"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        android:layout_marginStart="16dp"
+        android:layout_marginEnd="16dp"
+        android:layout_marginBottom="8dp"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <ProgressBar
+        android:id="@+id/edit_profile_progressbar"
+        style="?android:attr/progressBarStyle"
+        android:layout_width="160dp"
+        android:layout_height="160dp"
+        android:indeterminateTint="@color/OvercookedYellow"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/edit_profile_image_imv" />
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>

@@ -133,7 +133,8 @@ public class Firebase {
     }
 
     public void updateUser(User user, Model.UpdateUserListener listener) {
-
+        db.collection(User.COLLECTION_NAME).document(user.uid)
+                .set(user).addOnCompleteListener(task -> listener.onComplete());
     }
 
     public void getUserByUid(String uid, Model.GetUserByUidListener listener) {

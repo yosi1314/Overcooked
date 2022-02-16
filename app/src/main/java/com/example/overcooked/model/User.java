@@ -1,9 +1,11 @@
 package com.example.overcooked.model;
 
+import java.io.Serializable;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Objects;
 
-public class User {
+public class User implements Serializable {
     final public static String COLLECTION_NAME = "users";
 
     String uid;
@@ -72,4 +74,5 @@ public class User {
         user.setImg(imageUrl);
         return user;
     }
+
 }
