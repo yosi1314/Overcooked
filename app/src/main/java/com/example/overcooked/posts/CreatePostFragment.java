@@ -1,6 +1,7 @@
 package com.example.overcooked.posts;
 
 import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.os.Bundle;
@@ -8,13 +9,16 @@ import android.os.Bundle;
 import androidx.activity.result.ActivityResult;
 import androidx.activity.result.ActivityResultCallback;
 import androidx.activity.result.contract.ActivityResultContracts;
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.navigation.Navigation;
 
+import android.provider.MediaStore;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -50,7 +54,7 @@ public class CreatePostFragment extends Fragment {
         progressBar.setVisibility(View.GONE);
 
         imageImv.setOnClickListener(v -> {
-            openGallery();
+            openCamera();
         });
 
         createBtn.setOnClickListener(v -> {
@@ -61,39 +65,58 @@ public class CreatePostFragment extends Fragment {
         return view;
     }
 
+//    @Override
+//    public void onAttach(@NonNull Context context) {
+//        super.onAttach(context);
+//        registerForActivityResult(
+//                new ActivityResultContracts.StartActivityForResult(),
+//                result -> {
+//                    int resultCode = result.getResultCode();
+//                    if (resultCode == REQUEST_GALLERY) {
+//                        if (resultCode == Activity.RESULT_OK) {
+//                            Bundle extras = result.getData().getExtras();
+//                            imageBitmap = (Bitmap) extras.get("data");
+//                            imageImv.setImageBitmap(imageBitmap);
+//                        }
+//                    }
+//                }
+//        );
+//    }
+
     private void openGallery() {
         Intent intent = new Intent();
         intent.setAction(Intent.ACTION_VIEW);
         intent.setType("image/*");
         intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-//        startActivityForResult(intent, REQUEST_GALLERY);
-        registerForActivityResult(
-            new ActivityResultContracts.StartActivityForResult(),
-            result -> {
-                int resultCode = result.getResultCode();
-                if (resultCode == REQUEST_GALLERY) {
-                    if (resultCode == Activity.RESULT_OK) {
-                        Bundle extras = result.getData().getExtras();
-                        imageBitmap = (Bitmap) extras.get("data");
-                        imageImv.setImageBitmap(imageBitmap);
-                    }
-                }
-            }
-        );
+        startActivityForResult(intent, REQUEST_GALLERY);
+
+    }
+
+    private void openCamera() {
+        Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+        startActivityForResult(intent,REQUEST_CAMERA);
     }
 
 
-//    @Override
-//    public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
-//        super.onActivityResult(requestCode, resultCode, data);
-//        if (requestCode == REQUEST_GALLERY) {
-//            if (resultCode == Activity.RESULT_OK) {
-//                Bundle extras = data.getExtras();
-//                imageBitmap = (Bitmap) extras.get("data");
-//                imageImv.setImageBitmap(imageBitmap);
-//            }
-//        }
-//    }
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == REQUEST_GALLERY) {
+            if (resultCode == Activity.RESULT_OK) {
+                Bundle extras = data.getExtras();
+                imageBitmap = (Bitmap) extras.get("data");
+                imageImv.setImageBitmap(imageBitmap);
+            }
+        }
+        else if (requestCode == REQUEST_CAMERA){
+            if (resultCode == Activity.RESULT_OK){
+                Bundle extras = data.getExtras();
+                imageBitmap = (Bitmap) extras.get("data");
+                imageImv.setImageBitmap(imageBitmap);
+
+            }
+        }
+    }
 
     private void create() {
         progressBar.setVisibility(View.VISIBLE);

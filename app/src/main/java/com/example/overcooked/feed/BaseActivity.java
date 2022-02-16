@@ -15,11 +15,14 @@ import androidx.navigation.Navigation;
 import androidx.navigation.ui.AppBarConfiguration;
 import androidx.navigation.ui.NavigationUI;
 
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.view.inputmethod.InputMethodManager;
 
 import com.example.overcooked.R;
 import com.example.overcooked.helpers.IntentHelper;
@@ -51,13 +54,22 @@ public class BaseActivity extends AppCompatActivity implements NavigationView.On
         navView.setNavigationItemSelectedListener(this);
         navView.bringToFront();
 
-        ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(this, drawerLayout, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
+        ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(this, drawerLayout, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close) {
+          @Override
+          public void onDrawerSlide(View drawerView, float slideOffset) {
+              super.onDrawerSlide(drawerView, slideOffset);
+
+              if (getCurrentFocus() != null) {
+                  InputMethodManager inputManager = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+
+                  inputManager.hideSoftInputFromWindow(getCurrentFocus().getWindowToken(), InputMethodManager.HIDE_NOT_ALWAYS);
+              }
+          }
+        };
+
         drawerLayout.addDrawerListener(toggle);
 
         toggle.syncState();
-
-
-        //NavigationUI.setupWithNavController(navView, navCtl);
     }
 
     private void toLoginActivity() {

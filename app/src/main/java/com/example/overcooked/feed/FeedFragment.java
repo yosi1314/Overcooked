@@ -104,11 +104,12 @@ public class FeedFragment extends Fragment {
             titleTv.setText(post.getTitle());
             descriptionTv.setText(post.getDescription());
             authorTv.setText(post.getAuthor());
-            thumbnailImv.setImageResource(R.drawable.main_logo);
             if (post.getImg() != null){
                 Picasso.get()
                         .load(post.getImg())
                         .into(thumbnailImv);
+            } else {
+                thumbnailImv.setImageResource(R.drawable.main_logo);
             }
         }
     }

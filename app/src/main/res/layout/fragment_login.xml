@@ -39,13 +39,15 @@
             android:paddingTop="16dp"
             app:hintTextColor="@color/white"
             android:textColorHint="@color/white"
-            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox">
+            style="@style/Overcooked.TextInputLayoutStyle">
 
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/login_email_tv"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:inputType="textEmailAddress"
+                android:textCursorDrawable="@null"
+                android:textColor="#FFFFFF"
                 android:maxLines="1" />
         </com.google.android.material.textfield.TextInputLayout>
 
@@ -57,13 +59,15 @@
             android:paddingTop="16dp"
             app:hintTextColor="@color/white"
             android:textColorHint="@color/white"
-            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox">
+            style="@style/Overcooked.TextInputLayoutStyle">
 
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/login_password_tv"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:inputType="textPassword"
+                android:textCursorDrawable="@null"
+                android:textColor="#FFFFFF"
                 android:maxLines="1" />
         </com.google.android.material.textfield.TextInputLayout>
 

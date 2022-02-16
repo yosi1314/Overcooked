@@ -39,7 +39,7 @@
             android:paddingTop="16dp"
             android:textColorHint="@color/white"
             app:hintTextColor="@color/white"
-            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox">
+            style="@style/Overcooked.TextInputLayoutStyle">
 
 
         <com.google.android.material.textfield.TextInputEditText
@@ -47,6 +47,8 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:inputType="textEmailAddress"
+                android:textCursorDrawable="@null"
+                android:textColor="#FFFFFF"
                 android:maxLines="1" />
         </com.google.android.material.textfield.TextInputLayout>
 
@@ -58,7 +60,7 @@
             android:paddingTop="16dp"
             android:textColorHint="@color/white"
             app:hintTextColor="@color/white"
-            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox">
+            style="@style/Overcooked.TextInputLayoutStyle">
 
 
         <com.google.android.material.textfield.TextInputEditText
@@ -66,6 +68,8 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:inputType="textPassword"
+                android:textCursorDrawable="@null"
+                android:textColor="#FFFFFF"
                 android:maxLines="1" />
         </com.google.android.material.textfield.TextInputLayout>
 
@@ -77,13 +81,15 @@
             android:paddingTop="16dp"
             android:textColorHint="@color/white"
             app:hintTextColor="@color/white"
-            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox">
+            style="@style/Overcooked.TextInputLayoutStyle">
 
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/register_confirm_password_tv"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:inputType="textPassword"
+                android:textColor="#FFFFFF"
+                android:textCursorDrawable="@null"
                 android:maxLines="1" />
         </com.google.android.material.textfield.TextInputLayout>
 
