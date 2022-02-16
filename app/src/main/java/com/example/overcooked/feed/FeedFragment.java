@@ -1,28 +1,24 @@
 package com.example.overcooked.feed;
 
 import android.content.Context;
-import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
-import android.view.Menu;
-import android.view.MenuInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.LiveData;
 import androidx.lifecycle.ViewModelProvider;
-import androidx.navigation.NavDirections;
 import androidx.navigation.Navigation;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import com.example.overcooked.R;
-import com.example.overcooked.login.LoginActivity;
 import com.example.overcooked.model.Model;
 import com.example.overcooked.model.Post;
 import com.squareup.picasso.Picasso;
@@ -32,9 +28,11 @@ import java.util.List;
 
 public class FeedFragment extends Fragment {
 
+    String userUid;
     FeedViewModel viewModel;
     PostAdapter postAdapter;
     SwipeRefreshLayout swipeRefresh;
+    LiveData<List<Post>> liveDataPosts;
 
     @Override
     public void onAttach(@NonNull Context context) {
@@ -48,6 +46,10 @@ public class FeedFragment extends Fragment {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_feed, container, false);
 
+        userUid = FeedFragmentArgs.fromBundle(getArguments()).getUserUid();
+
+        setRelevantFragmentData();
+
         swipeRefresh = view.findViewById(R.id.feed_swiperefresh);
         swipeRefresh.setOnRefreshListener(() -> Model.instance.refreshPostsList());
 
@@ -60,19 +62,27 @@ public class FeedFragment extends Fragment {
         feed.setAdapter(postAdapter);
 
         postAdapter.setOnItemClickListener((v, position) -> {
-            String postId = viewModel.getPosts().getValue().get(position).getId();
+//            String postId = viewModel.getPosts().getValue().get(position).getId();
+            String postId = liveDataPosts.getValue().get(position).getId();
             Navigation.findNavController(v).navigate(FeedFragmentDirections.actionFeedFragmentToPostFragment(postId));
         });
 
         setHasOptionsMenu(true);
 
-        viewModel.getPosts().observe(getViewLifecycleOwner(), postList -> refresh());
+//        viewModel.getPosts().observe(getViewLifecycleOwner(), postList -> refresh());
+        liveDataPosts.observe(getViewLifecycleOwner(), postList -> refresh());
         swipeRefresh.setRefreshing(Model.instance.getPostListLoadingState().getValue() == Model.PostListLoadingState.loading);
         Model.instance.getPostListLoadingState().observe(getViewLifecycleOwner(), postListLoadingState -> {
             swipeRefresh.setRefreshing(postListLoadingState == Model.PostListLoadingState.loading);
         });
 
         return view;
+    }
+
+    private void setRelevantFragmentData(){
+        boolean isGlobalFeed = userUid == null;
+        liveDataPosts = isGlobalFeed ? viewModel.getPosts() : viewModel.getMyPosts(userUid);
+        ((AppCompatActivity)getActivity()).getSupportActionBar().setTitle(isGlobalFeed ? "Feed" : "My Posts");
     }
 
     private void refresh() {
@@ -130,13 +140,15 @@ public class FeedFragment extends Fragment {
 
         @Override
         public void onBindViewHolder(@NonNull PostViewHolder holder, int position) {
-            Post post = viewModel.getPosts().getValue().get(position);
+//            Post post = viewModel.getPosts().getValue().get(position);
+            Post post = liveDataPosts.getValue().get(position);
             holder.bind(post);
         }
 
         @Override
         public int getItemCount() {
-            List<Post> data = viewModel.getPosts().getValue();
+//            List<Post> data = viewModel.getPosts().getValue();
+            List<Post> data = liveDataPosts.getValue();
             if (data == null) {
                 return 0;
             }
