@@ -8,19 +8,16 @@ public class User {
 
     String uid;
     String displayName = "";
+    String email = "";
     String img;
 
-    public User() { }
-
-    public User(String uid, String displayName) {
-        this.uid = uid;
-        this.displayName = displayName;
+    public User() {
     }
 
-    public User(String uid, String displayName, String img) {
+    public User(String uid, String displayName, String email) {
         this.uid = uid;
         this.displayName = displayName;
-        this.img = img;
+        this.email = email;
     }
 
     public String getUid() {
@@ -39,6 +36,14 @@ public class User {
         this.displayName = displayName;
     }
 
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
     public String getImg() {
         return img;
     }
@@ -51,6 +56,7 @@ public class User {
         Map<String, Object> json = new HashMap<String, Object>();
         json.put("uid", uid);
         json.put("displayName", displayName);
+        json.put("email", email);
         json.put("img", img);
 
         return json;
@@ -59,9 +65,10 @@ public class User {
     public static User create(Map<String, Object> json) {
         String uid = (String) json.get("uid");
         String displayName = (String) json.get("displayName");
+        String email = (String) json.get("email");
         String imageUrl = (String) json.get("img");
 
-        User user = new User(uid, displayName);
+        User user = new User(uid, displayName, email);
         user.setImg(imageUrl);
         return user;
     }

@@ -81,7 +81,7 @@ public class RegisterFragment extends Fragment {
         Model.instance.signUp(email, password, user -> {
             if (user != null) {
                 String uid = user.getUid();
-                User userToAdd = new User(uid, displayName);
+                User userToAdd = new User(uid, displayName, email);
                 if (imageBitmap != null) {
                     Model.instance.uploadImage(imageBitmap, uid + ".jpg", getString(R.string.storage_users), url -> {
                         userToAdd.setImg(url);
