@@ -16,6 +16,7 @@ import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.UserProfileChangeRequest;
+import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.FirebaseFirestoreSettings;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
@@ -57,7 +58,7 @@ public class Firebase {
                 });
     }
 
-    public void addPost(Post post, Model.AddPostListener listener){
+    public void addPost(Post post, Model.AddPostListener listener) {
         Map<String, Object> json = post.toJson();
         db.collection(Post.COLLECTION_NAME)
                 .document(post.getId())
@@ -66,7 +67,7 @@ public class Firebase {
                 .addOnFailureListener(e -> listener.onComplete());
     }
 
-    public void createUser(User user, Model.AddUserListener listener){
+    public void createUser(User user, Model.AddUserListener listener) {
         Map<String, Object> json = user.toJson();
         db.collection(User.COLLECTION_NAME)
                 .document(user.getUid())
@@ -133,5 +134,19 @@ public class Firebase {
 
     public void updateUser(User user, Model.UpdateUserListener listener) {
 
+    }
+
+    public void getUserByUid(String uid, Model.GetUserByUidListener listener) {
+        db.collection(User.COLLECTION_NAME)
+                .document(uid)
+                .get()
+                .addOnCompleteListener(task -> {
+                    User user = null;
+                    DocumentSnapshot data = task.getResult();
+                    if (task.isSuccessful() & data != null) {
+                        user = User.create(data.getData());
+                    }
+                    listener.onComplete(user);
+                });
     }
 }

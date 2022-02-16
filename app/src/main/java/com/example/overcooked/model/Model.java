@@ -146,6 +146,10 @@ public class Model {
         firebase.signOut(listener);
     }
 
+    public void getUserById(String uid, GetUserByUidListener listener) {
+        firebase.getUserByUid(uid, listener);
+    }
+
     public interface UserAuthentication {
         void onComplete(FirebaseUser user);
     }
@@ -180,5 +184,9 @@ public class Model {
 
     public interface UpdateUserListener {
         void onComplete();
+    }
+
+    public interface GetUserByUidListener {
+        void onComplete(User user);
     }
 }

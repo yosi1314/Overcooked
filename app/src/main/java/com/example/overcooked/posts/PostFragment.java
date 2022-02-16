@@ -53,9 +53,18 @@ public class PostFragment extends Fragment {
         } else {
             post_image_view.setImageResource(R.drawable.main_logo);
         }
+        getAuthorData();
         post_title.setText(post.getTitle());
         post_description.setText(post.getDescription());
-        post_author.setText(post.getAuthor());
         post_content.setText(post.getContent());
     }
+
+    private void getAuthorData(){
+        post_author.setText("Loading author...");
+        Model.instance.getUserById(post.getAuthor(), user -> {
+            post_author.setText(user.getDisplayName());
+        });
+    }
+
+
 }
