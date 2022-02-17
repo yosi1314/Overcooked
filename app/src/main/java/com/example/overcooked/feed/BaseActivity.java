@@ -23,13 +23,17 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
+import android.widget.ImageView;
+import android.widget.TextView;
 
 import com.example.overcooked.R;
 import com.example.overcooked.helpers.IntentHelper;
 import com.example.overcooked.login.LoginActivity;
 import com.example.overcooked.model.Model;
 import com.example.overcooked.model.Post;
+import com.example.overcooked.model.User;
 import com.google.android.material.navigation.NavigationView;
+import com.squareup.picasso.Picasso;
 
 
 public class BaseActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
@@ -37,10 +41,17 @@ public class BaseActivity extends AppCompatActivity implements NavigationView.On
     DrawerLayout drawerLayout;
     NavHost navHost;
 
+    ImageView profileImgImv;
+    TextView displayNameTv;
+    TextView emailTv;
+
+    User user;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_base);
+        getUser();
 
         navHost = (NavHost) getSupportFragmentManager().findFragmentById(R.id.base_navhost);
         navCtl = navHost.getNavController();
@@ -54,6 +65,17 @@ public class BaseActivity extends AppCompatActivity implements NavigationView.On
         navView.bringToFront();
 
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(this, drawerLayout, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close) {
+            @Override
+            public void onDrawerOpened(View drawerView) {
+                super.onDrawerOpened(drawerView);
+
+                profileImgImv = findViewById(R.id.menu_img_imv);
+                displayNameTv = findViewById(R.id.menu_display_name_tv);
+                emailTv = findViewById(R.id.menu_email_tv);
+
+                setUserDetails();
+            }
+
             @Override
             public void onDrawerSlide(View drawerView, float slideOffset) {
                 super.onDrawerSlide(drawerView, slideOffset);
@@ -69,6 +91,22 @@ public class BaseActivity extends AppCompatActivity implements NavigationView.On
         drawerLayout.addDrawerListener(toggle);
 
         toggle.syncState();
+    }
+
+    private void getUser() {
+        Model.instance.getUserById(Model.instance.getCurrentUserUID(), (user) -> {
+            this.user = user;
+        });
+    }
+
+    private void setUserDetails() {
+        displayNameTv.setText(user.getDisplayName());
+        emailTv.setText(user.getEmail());
+        if(user.getImg() != null){
+            Picasso.get().load(user.getImg()).into(profileImgImv);
+        } else {
+            profileImgImv.setImageResource(R.mipmap.ic_launcher_round);
+        }
     }
 
     private void toLoginActivity() {
@@ -96,10 +134,6 @@ public class BaseActivity extends AppCompatActivity implements NavigationView.On
             case R.id.menu_my_posts:
                 bundle.putString("userUid", Model.instance.getCurrentUserUID());
                 navCtl.navigate(R.id.action_global_feedFragment, bundle);
-                break;
-            case R.id.createPostFragment:
-                bundle.putSerializable("post", new Post());
-                navCtl.navigate(R.id.action_global_createPostFragment, bundle);
                 break;
             case R.id.menu_sign_out:
                 Model.instance.signOut(() -> toLoginActivity());

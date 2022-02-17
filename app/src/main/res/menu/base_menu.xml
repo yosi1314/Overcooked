@@ -15,9 +15,6 @@
             android:id="@+id/menu_my_posts"
             android:title="@string/my_posts" />
         <item
-            android:id="@+id/createPostFragment"
-            android:title="@string/new_post" />
-        <item
             android:id="@+id/menu_sign_out"
             android:title="@string/sign_out" />
     </group>

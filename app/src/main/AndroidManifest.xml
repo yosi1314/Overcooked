@@ -13,14 +13,17 @@
         <activity
             android:name=".feed.BaseActivity"
             android:exported="false"
-            android:theme="@style/Theme.Overcooked.NoActionBar"/>
+            android:theme="@style/Theme.Overcooked.NoActionBar"
+            android:screenOrientation="portrait"/>
         <activity
             android:name=".login.LoginActivity"
-            android:exported="false" />
+            android:exported="false"
+            android:screenOrientation="portrait"/>
         <activity
             android:name=".IntroActivity"
             android:exported="true"
-            android:theme="@style/Theme.AppCompat.DayNight.NoActionBar">
+            android:theme="@style/Theme.AppCompat.DayNight.NoActionBar"
+            android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 

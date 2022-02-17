@@ -46,28 +46,36 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:background="#E9222020"
                 android:orientation="vertical"
                 android:padding="16dp">
 
                 <!-- Title, secondary and supporting text -->
                 <TextView
                     android:id="@+id/post_title_tv"
-                    android:layout_width="wrap_content"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:text="Title"
                     android:textAppearance="?attr/textAppearanceHeadline6"
                     android:textColor="#FFFFFF"
-                    android:textSize="24sp" />
+                    android:textSize="26sp" />
+
+                <ImageView
+                    android:id="@+id/imageView"
+                    android:layout_width="match_parent"
+                    android:layout_height="2dp"
+                    android:layout_marginTop="8dp"
+                    app:srcCompat="@drawable/dotted_divider" />
 
                 <TextView
                     android:id="@+id/post_desc_tv"
-                    android:layout_width="wrap_content"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="8dp"
                     android:text="Description"
                     android:textAppearance="?attr/textAppearanceBody2"
                     android:textColor="#FFFFFF"
-                    android:textSize="18sp" />
+                    android:textSize="16sp" />
 
             </LinearLayout>
         </LinearLayout>

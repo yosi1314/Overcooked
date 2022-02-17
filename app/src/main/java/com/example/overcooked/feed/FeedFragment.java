@@ -21,6 +21,8 @@ import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 import com.example.overcooked.R;
 import com.example.overcooked.model.Model;
 import com.example.overcooked.model.Post;
+import com.getbase.floatingactionbutton.FloatingActionButton;
+import com.getbase.floatingactionbutton.FloatingActionsMenu;
 import com.squareup.picasso.Picasso;
 
 import java.util.List;
@@ -53,6 +55,10 @@ public class FeedFragment extends Fragment {
         swipeRefresh = view.findViewById(R.id.feed_swiperefresh);
         swipeRefresh.setOnRefreshListener(() -> Model.instance.refreshPostsList());
 
+
+        FloatingActionButton addButton = view.findViewById(R.id.feed_add_post_button);
+        FloatingActionsMenu feedMenuFab = view.findViewById(R.id.feed_fab_menu);
+
         RecyclerView feed = view.findViewById(R.id.feed_rv);
         feed.setHasFixedSize(true);
 
@@ -62,7 +68,8 @@ public class FeedFragment extends Fragment {
         feed.setAdapter(postAdapter);
 
         postAdapter.setOnItemClickListener((v, position) -> {
-            String postId = viewModel.getPosts().getValue().get(position).getId();
+            LiveData<List<Post>> data = isGlobalFeed ? viewModel.getPosts() : viewModel.getMyPosts(userUid);
+            String postId = data.getValue().get(position).getId();
             //String postId = liveDataPosts.getValue().get(position).getId();
             Navigation.findNavController(v).navigate(FeedFragmentDirections.actionFeedFragmentToPostFragment(postId));
         });
@@ -74,6 +81,12 @@ public class FeedFragment extends Fragment {
         swipeRefresh.setRefreshing(Model.instance.getPostListLoadingState().getValue() == Model.PostListLoadingState.loading);
         Model.instance.getPostListLoadingState().observe(getViewLifecycleOwner(), postListLoadingState -> {
             swipeRefresh.setRefreshing(postListLoadingState == Model.PostListLoadingState.loading);
+        });
+
+        feedMenuFab.bringToFront();
+        addButton.setOnClickListener(v -> {
+            feedMenuFab.toggle();
+            Navigation.findNavController(v).navigate(FeedFragmentDirections.actionGlobalCreatePostFragment(new Post()));
         });
 
         return view;

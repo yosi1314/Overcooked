@@ -23,6 +23,9 @@ import com.example.overcooked.model.Model;
 import com.example.overcooked.model.Post;
 import com.squareup.picasso.Picasso;
 
+import java.io.FileNotFoundException;
+import java.io.IOException;
+
 
 public class CreatePostFragment extends Fragment {
     private static final int REQUEST_CAMERA = 1;
@@ -35,7 +38,7 @@ public class CreatePostFragment extends Fragment {
     EditText contentEt;
     ImageView imageImv;
     Bitmap imageBitmap;
-    Button createBtn;
+    Button actionBtn;
     ProgressBar progressBar;
 
     @Override
@@ -47,24 +50,25 @@ public class CreatePostFragment extends Fragment {
         descriptionEt = view.findViewById(R.id.create_post_description_tv);
         contentEt = view.findViewById(R.id.create_post_content_tv);
         imageImv = view.findViewById(R.id.create_post_imv);
-        createBtn = view.findViewById(R.id.create_post_done_btn);
+        actionBtn = view.findViewById(R.id.create_post_done_btn);
         progressBar = view.findViewById(R.id.create_post_progress_bar);
         progressBar.setVisibility(View.GONE);
 
         imageImv.setOnClickListener(v -> {
-            openCamera();
+            openGallery();
         });
 
-        createBtn.setOnClickListener(v -> {
+        actionBtn.setOnClickListener(v -> {
             create();
         });
 
         post = CreatePostFragmentArgs.fromBundle(getArguments()).getPost();
-        if(post.getId() != null){
+        if (post.getId() != null) {
             titleEt.setText(post.getTitle());
             descriptionEt.setText(post.getDescription());
             contentEt.setText(post.getContent());
-            if(post.getImg() != null){
+            actionBtn.setText("Save");
+            if (post.getImg() != null) {
                 Picasso.get().load(post.getImg()).into(imageImv);
             } else {
                 imageImv.setImageResource(R.drawable.main_logo);
@@ -74,36 +78,15 @@ public class CreatePostFragment extends Fragment {
         return view;
     }
 
-//    @Override
-//    public void onAttach(@NonNull Context context) {
-//        super.onAttach(context);
-//        registerForActivityResult(
-//                new ActivityResultContracts.StartActivityForResult(),
-//                result -> {
-//                    int resultCode = result.getResultCode();
-//                    if (resultCode == REQUEST_GALLERY) {
-//                        if (resultCode == Activity.RESULT_OK) {
-//                            Bundle extras = result.getData().getExtras();
-//                            imageBitmap = (Bitmap) extras.get("data");
-//                            imageImv.setImageBitmap(imageBitmap);
-//                        }
-//                    }
-//                }
-//        );
-//    }
-
     private void openGallery() {
-        Intent intent = new Intent();
-        intent.setAction(Intent.ACTION_VIEW);
-        intent.setType("image/*");
-        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        Intent intent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
         startActivityForResult(intent, REQUEST_GALLERY);
 
     }
 
     private void openCamera() {
         Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-        startActivityForResult(intent,REQUEST_CAMERA);
+        startActivityForResult(intent, REQUEST_CAMERA);
     }
 
 
@@ -112,23 +95,25 @@ public class CreatePostFragment extends Fragment {
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == REQUEST_GALLERY) {
             if (resultCode == Activity.RESULT_OK) {
-                Bundle extras = data.getExtras();
-                imageBitmap = (Bitmap) extras.get("data");
-                imageImv.setImageBitmap(imageBitmap);
+                if (data != null) {
+                    try {
+                        imageBitmap = MediaStore.Images.Media.getBitmap(getActivity().getContentResolver(), data.getData());
+                        imageImv.setImageBitmap(imageBitmap);
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                }
             }
-        }
-        else if (requestCode == REQUEST_CAMERA){
-            if (resultCode == Activity.RESULT_OK){
-                Bundle extras = data.getExtras();
-                imageBitmap = (Bitmap) extras.get("data");
-                imageImv.setImageBitmap(imageBitmap);
-            }
+        } else if (requestCode == REQUEST_CAMERA) {
+            Bundle extras = data.getExtras();
+            imageBitmap = (Bitmap) extras.get("data");
+            imageImv.setImageBitmap(imageBitmap);
         }
     }
 
     private void create() {
         progressBar.setVisibility(View.VISIBLE);
-        createBtn.setEnabled(false);
+        actionBtn.setEnabled(false);
         String title = titleEt.getText().toString();
         String description = descriptionEt.getText().toString();
         String content = contentEt.getText().toString();
@@ -136,7 +121,7 @@ public class CreatePostFragment extends Fragment {
         String id = post.getId() == null ? java.util.UUID.randomUUID().toString() : post.getId();
 
         Post newPost = new Post(id, title, description, author, content);
-        if(imageBitmap != null){
+        if (imageBitmap != null) {
             Model.instance.uploadImage(imageBitmap, id + ".jpg", getString(R.string.storage_posts), url -> {
                 newPost.setImg(url);
                 handleUserAction(newPost);
@@ -149,7 +134,7 @@ public class CreatePostFragment extends Fragment {
     }
 
     private void handleUserAction(Post newPost) {
-        if(post.getId() == null){
+        if (post.getId() == null) {
             Model.instance.addPost(newPost, () -> {
                 Navigation.findNavController(titleEt).navigateUp();
             });

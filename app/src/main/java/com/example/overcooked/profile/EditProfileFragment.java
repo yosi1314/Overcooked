@@ -20,7 +20,7 @@ import androidx.navigation.Navigation;
 import com.example.overcooked.R;
 import com.example.overcooked.model.Model;
 import com.example.overcooked.model.User;
-import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.getbase.floatingactionbutton.FloatingActionButton;
 import com.squareup.picasso.Picasso;
 
 public class EditProfileFragment extends Fragment {

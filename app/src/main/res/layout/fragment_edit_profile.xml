@@ -29,37 +29,27 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/edit_profile_image_imv">
 
-        <com.google.android.material.floatingactionbutton.FloatingActionButton
+        <com.getbase.floatingactionbutton.FloatingActionButton
             android:id="@+id/edit_button_gallery_button"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_margin="16dp"
-            android:layout_marginEnd="92dp"
-            android:layout_marginBottom="16dp"
-            android:textSize="24sp"
-            android:tint="@color/white"
-            app:backgroundTint="@color/OvercookedYellow"
-            app:fabSize="mini"
-            app:layout_constraintBottom_toBottomOf="@+id/register_image_imv"
-            app:layout_constraintEnd_toStartOf="@+id/edit_profile_camera_button"
-            app:srcCompat="@android:drawable/ic_menu_gallery"
-            tools:ignore="SpeakableTextPresentCheck" />
+            app:fab_colorNormal="@color/OvercookedYellow"
+            app:fab_colorPressed="@color/OvercookedYellow"
+            app:fab_icon="@android:drawable/ic_menu_gallery"
+            app:fab_size="mini"
+            tools:ignore="SpeakableTextPresentCheck"
+            tools:layout_editor_absoluteX="148dp" />
 
-        <com.google.android.material.floatingactionbutton.FloatingActionButton
+        <com.getbase.floatingactionbutton.FloatingActionButton
             android:id="@+id/edit_button_camera_button"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_margin="16dp"
-            android:layout_marginEnd="92dp"
-            android:layout_marginBottom="16dp"
-            android:textSize="24sp"
-            android:tint="@color/white"
-            app:backgroundTint="@color/OvercookedYellow"
-            app:fabSize="mini"
-            app:layout_constraintBottom_toBottomOf="@+id/register_image_imv"
-            app:layout_constraintEnd_toStartOf="@+id/edit_profile_camera_button"
-            app:srcCompat="@android:drawable/ic_menu_camera"
-            tools:ignore="SpeakableTextPresentCheck" />
+            app:fab_colorNormal="@color/OvercookedYellow"
+            app:fab_colorPressed="@color/OvercookedYellow"
+            app:fab_icon="@android:drawable/ic_menu_camera"
+            app:fab_size="mini"
+            tools:ignore="SpeakableTextPresentCheck"
+            tools:layout_editor_absoluteX="206dp" />
 
     </com.google.android.flexbox.FlexboxLayout>
 
