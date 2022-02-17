@@ -51,7 +51,6 @@
                         android:id="@+id/flexboxLayout2"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginStart="14dp"
                         android:orientation="horizontal"
                         app:justifyContent="flex_start"
                         app:layout_constraintEnd_toEndOf="parent"
@@ -60,7 +59,7 @@
                         app:layout_constraintTop_toBottomOf="@+id/create_post_imv">
 
                         <com.getbase.floatingactionbutton.FloatingActionButton
-                            android:id="@+id/post_gallery_button"
+                            android:id="@+id/create_post_gallery_button"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             app:fab_colorNormal="@color/OvercookedYellow"
@@ -71,7 +70,7 @@
                             tools:layout_editor_absoluteX="148dp" />
 
                         <com.getbase.floatingactionbutton.FloatingActionButton
-                            android:id="@+id/post_camera_button"
+                            android:id="@+id/create_post_camera_button"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             app:fab_colorNormal="@color/OvercookedYellow"

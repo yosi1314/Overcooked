@@ -24,7 +24,6 @@ public class LoginActivity extends AppCompatActivity {
         navController = navHost.getNavController();
 
         NavigationUI.setupActionBarWithNavController(this, navController);
-        getSupportActionBar().setTitle("");
     }
 
     @Override

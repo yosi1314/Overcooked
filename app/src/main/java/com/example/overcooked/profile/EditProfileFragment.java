@@ -111,28 +111,43 @@ public class EditProfileFragment extends Fragment {
     }
 
     private void update() {
-        progressBar.setVisibility(View.VISIBLE);
-        disableFAB(galleryBtn);
-        disableFAB(cameraBtn);
-        disableButton(saveBtn);
         String displayName = displayNameEt.getText().toString();
         String email = user.getEmail();
         String id = user.getUid();
 
-        User newUser = new User(id, displayName, email);
-        if (imageBitmap != null) {
-            Model.instance.uploadImage(imageBitmap, id + ".jpg", getString(R.string.storage_posts), url -> {
-                newUser.setImg(url);
+        boolean shouldSubmit = isShouldSubmit(displayName);
+
+        if (shouldSubmit) {
+            progressBar.setVisibility(View.VISIBLE);
+            disableFAB(galleryBtn);
+            disableFAB(cameraBtn);
+            disableButton(saveBtn);
+            User newUser = new User(id, displayName, email);
+            if (imageBitmap != null) {
+                Model.instance.uploadImage(imageBitmap, id + ".jpg", getString(R.string.storage_posts), url -> {
+                    newUser.setImg(url);
+                    Model.instance.updateUser(newUser, () -> {
+                        Navigation.findNavController(displayNameEt).navigateUp();
+                    });
+                });
+            } else {
+                newUser.setImg(user.getImg());
                 Model.instance.updateUser(newUser, () -> {
                     Navigation.findNavController(displayNameEt).navigateUp();
                 });
-            });
-        } else {
-            newUser.setImg(user.getImg());
-            Model.instance.updateUser(newUser, () -> {
-                Navigation.findNavController(displayNameEt).navigateUp();
-            });
+            }
         }
+    }
+
+    private boolean isShouldSubmit(String displayName) {
+        boolean shouldSubmit = true;
+
+        if (displayName.isEmpty()) {
+            displayNameEt.setError("Display name cannot be empty");
+            shouldSubmit = false;
+        }
+
+        return shouldSubmit;
     }
 
     private void disableButton(Button button) {

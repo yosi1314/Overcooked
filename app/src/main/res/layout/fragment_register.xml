@@ -7,32 +7,79 @@
     android:background="#000000"
     tools:context=".login.RegisterFragment">
 
-
-
-    <ImageView
-        android:id="@+id/register_image_imv"
-        android:layout_width="150dp"
-        android:layout_height="150dp"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="28dp"
-        android:layout_marginEnd="8dp"
-        app:layout_constraintDimensionRatio="16:9"
+    <com.google.android.flexbox.FlexboxLayout
+        android:id="@+id/flexboxLayout1"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        app:alignContent="center"
+        app:alignItems="center"
+        app:flexDirection="column"
+        app:justifyContent="center"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.497"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:srcCompat="@drawable/main_logo" />
+        app:layout_constraintTop_toTopOf="parent">
+
+        <ImageView
+            android:id="@+id/register_image_imv"
+            android:layout_width="match_parent"
+            android:layout_height="150dp"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="14dp"
+            android:layout_marginEnd="8dp"
+            app:layout_constraintDimensionRatio="16:9"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.497"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:srcCompat="@mipmap/ic_launcher_round" />
+
+        <com.google.android.flexbox.FlexboxLayout
+            android:id="@+id/flexboxLayout2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8sp"
+            android:orientation="horizontal"
+            app:justifyContent="center"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="1.0"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/create_post_imv">
+
+            <com.getbase.floatingactionbutton.FloatingActionButton
+                android:id="@+id/create_post_gallery_button"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:fab_colorNormal="@color/OvercookedYellow"
+                app:fab_colorPressed="@color/OvercookedYellow"
+                app:fab_icon="@android:drawable/ic_menu_gallery"
+                app:fab_size="mini"
+                tools:ignore="SpeakableTextPresentCheck"
+                tools:layout_editor_absoluteX="148dp" />
+
+            <com.getbase.floatingactionbutton.FloatingActionButton
+                android:id="@+id/create_post_camera_button"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:fab_colorNormal="@color/OvercookedYellow"
+                app:fab_colorPressed="@color/OvercookedYellow"
+                app:fab_icon="@android:drawable/ic_menu_camera"
+                app:fab_size="mini"
+                tools:ignore="SpeakableTextPresentCheck"
+                tools:layout_editor_absoluteX="206dp" />
+
+        </com.google.android.flexbox.FlexboxLayout>
+
+    </com.google.android.flexbox.FlexboxLayout>
 
     <androidx.appcompat.widget.LinearLayoutCompat
         android:id="@+id/linearLayoutCompat"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_margin="30dp"
-        android:layout_marginTop="4dp"
+        android:layout_margin="10dp"
         android:orientation="vertical"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/register_image_imv">
+        app:layout_constraintTop_toBottomOf="@+id/flexboxLayout1">
 
         <com.google.android.material.textfield.TextInputLayout
             style="@style/Overcooked.TextInputLayoutStyle"
@@ -40,12 +87,12 @@
             android:layout_height="wrap_content"
             android:layout_margin="4dp"
             android:hint="@string/display_name"
-            android:paddingTop="16dp"
+            android:paddingTop="8dp"
             android:textColorHint="@color/white"
             app:hintTextColor="@color/white">
 
             <com.google.android.material.textfield.TextInputEditText
-                android:id="@+id/register_display_name_tv"
+                android:id="@+id/register_display_name_et"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:inputType="text"
@@ -60,13 +107,12 @@
             android:layout_height="wrap_content"
             android:layout_margin="4dp"
             android:hint="@string/email"
-            android:paddingTop="16dp"
+            android:paddingTop="8dp"
             android:textColorHint="@color/white"
             app:hintTextColor="@color/white">
 
-
             <com.google.android.material.textfield.TextInputEditText
-                android:id="@+id/register_email_tv"
+                android:id="@+id/register_email_et"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:inputType="textEmailAddress"
@@ -81,13 +127,12 @@
             android:layout_height="wrap_content"
             android:layout_margin="4dp"
             android:hint="@string/password"
-            android:paddingTop="16dp"
+            android:paddingTop="8dp"
             android:textColorHint="@color/white"
             app:hintTextColor="@color/white">
 
-
             <com.google.android.material.textfield.TextInputEditText
-                android:id="@+id/register_password_tv"
+                android:id="@+id/register_password_et"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:inputType="textPassword"
@@ -102,12 +147,12 @@
             android:layout_height="wrap_content"
             android:layout_margin="4dp"
             android:hint="@string/confirm_password"
-            android:paddingTop="16dp"
+            android:paddingTop="8dp"
             android:textColorHint="@color/white"
             app:hintTextColor="@color/white">
 
             <com.google.android.material.textfield.TextInputEditText
-                android:id="@+id/register_confirm_password_tv"
+                android:id="@+id/register_confirm_password_et"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:inputType="textPassword"
@@ -126,16 +171,22 @@
             android:textColor="#000000"
             app:backgroundTint="@color/OvercookedYellow" />
 
-        <TextView
-            android:id="@+id/register_signin_tv"
+        <com.google.android.flexbox.FlexboxLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="8dp"
-            android:linksClickable="true"
-            android:text="@string/welcome_back_sign_in"
-            android:textAlignment="center"
-            android:textColor="@color/white"
-            android:textSize="16sp" />
+            android:layout_height="match_parent"
+            app:justifyContent="center">
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/register_signin_btn"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:linksClickable="true"
+                android:text="@string/welcome_back_sign_in"
+                android:textAlignment="center"
+                android:textAllCaps="false"
+                android:textColor="@color/white"
+                android:textSize="14sp" />
+        </com.google.android.flexbox.FlexboxLayout>
 
     </androidx.appcompat.widget.LinearLayoutCompat>
 

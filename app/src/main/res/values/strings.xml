@@ -6,7 +6,7 @@
     <string name="password">password</string>
     <string name="login">login</string>
     <string name="new_here_sign_up"><u>New here? Sign up!</u></string>
-    <string name="welcome_back_sign_in">Welcome back! Sign in</string>
+    <string name="welcome_back_sign_in"><u>Welcome back! Sign in</u></string>
     <string name="confirm_password">confirm password</string>
     <string name="register">register</string>
     <string name="feed">Feed</string>

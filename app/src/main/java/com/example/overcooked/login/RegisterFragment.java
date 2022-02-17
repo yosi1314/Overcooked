@@ -9,6 +9,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -24,12 +25,12 @@ import com.example.overcooked.model.User;
 public class RegisterFragment extends Fragment {
     private static final int REQUEST_CAMERA = 1;
     private static final int REQUEST_GALLERY = 2;
-    TextView displayNameTv;
-    TextView emailTv;
-    TextView passwordTv;
-    TextView confirmPasswordTv;
+    EditText displayNameEt;
+    EditText emailEt;
+    EditText passwordEt;
+    EditText confirmPasswordEt;
     Button registerButton;
-    TextView goToSignIn;
+    Button goToSignIn;
     ImageView userImageImv;
     Bitmap imageBitmap;
     private IntentHelper intentHelper = new IntentHelper();
@@ -40,12 +41,12 @@ public class RegisterFragment extends Fragment {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_register, container, false);
 
-        displayNameTv = view.findViewById(R.id.register_display_name_tv);
-        emailTv = view.findViewById(R.id.register_email_tv);
-        passwordTv = view.findViewById(R.id.register_password_tv);
-        confirmPasswordTv = view.findViewById(R.id.register_confirm_password_tv);
+        displayNameEt = view.findViewById(R.id.register_display_name_et);
+        emailEt = view.findViewById(R.id.register_email_et);
+        passwordEt = view.findViewById(R.id.register_password_et);
+        confirmPasswordEt = view.findViewById(R.id.register_confirm_password_et);
         registerButton = view.findViewById(R.id.register_signup_btn);
-        goToSignIn = view.findViewById(R.id.register_signin_tv);
+        goToSignIn = view.findViewById(R.id.register_signin_btn);
 
         userImageImv = view.findViewById(R.id.register_image_imv);
         userImageImv.setOnClickListener(v -> openCamera());
@@ -58,46 +59,81 @@ public class RegisterFragment extends Fragment {
     }
 
     private void registerUser() {
-        String displayName = displayNameTv.getText().toString();
-        String email = emailTv.getText().toString();
-        String password = passwordTv.getText().toString();
-        String passwordConfirmation = confirmPasswordTv.getText().toString();
+        String displayName = displayNameEt.getText().toString();
+        String email = emailEt.getText().toString();
+        String password = passwordEt.getText().toString();
+        String passwordConfirmation = confirmPasswordEt.getText().toString();
+
+        boolean shouldSubmit = isShouldSubmit(displayName, email, password, passwordConfirmation);
 
         if (displayName == null) {
-            displayNameTv.setError("Display name cannot be empty");
+            displayNameEt.setError("Display name cannot be empty");
             return;
         }
 
         if (!android.util.Patterns.EMAIL_ADDRESS.matcher(email).matches()) {
-            emailTv.setError("Email is not valid");
+            emailEt.setError("Email is not valid");
             return;
         }
 
         if (!password.equals(passwordConfirmation)) {
-            confirmPasswordTv.setError("Passwords do not match");
+            confirmPasswordEt.setError("Passwords do not match");
             return;
         }
 
-        Model.instance.signUp(email, password, user -> {
-            if (user != null) {
-                String uid = user.getUid();
-                User userToAdd = new User(uid, displayName, email);
-                if (imageBitmap != null) {
-                    Model.instance.uploadImage(imageBitmap, uid + ".jpg", getString(R.string.storage_users), url -> {
-                        userToAdd.setImg(url);
+        if (shouldSubmit) {
+            Model.instance.signUp(email, password, user -> {
+                if (user != null) {
+                    String uid = user.getUid();
+                    User userToAdd = new User(uid, displayName, email);
+                    if (imageBitmap != null) {
+                        Model.instance.uploadImage(imageBitmap, uid + ".jpg", getString(R.string.storage_users), url -> {
+                            userToAdd.setImg(url);
+                            Model.instance.createUser(userToAdd, () -> {
+                                intentHelper.toFeedActivity(this);
+                            });
+                        });
+                    } else {
                         Model.instance.createUser(userToAdd, () -> {
                             intentHelper.toFeedActivity(this);
                         });
-                    });
+                    }
                 } else {
-                    Model.instance.createUser(userToAdd, () -> {
-                        intentHelper.toFeedActivity(this);
-                    });
+                    //TODO: display error label to client
                 }
-            } else {
-                //TODO: display error label to client
-            }
-        });
+            });
+        }
+    }
+
+    private boolean isShouldSubmit(String displayName, String email, String password, String passwordConfirmation) {
+        boolean shouldSubmit = true;
+
+        if (displayName.isEmpty()) {
+            displayNameEt.setError("Display name cannot be empty");
+            shouldSubmit = false;
+        }
+
+        if (email.isEmpty()) {
+            displayNameEt.setError("Email cannot be empty");
+            shouldSubmit = false;
+        }
+
+        if (!android.util.Patterns.EMAIL_ADDRESS.matcher(email).matches()) {
+            displayNameEt.setError("Invalid email");
+            shouldSubmit = false;
+        }
+
+        if (password.isEmpty()) {
+            passwordEt.setError("Password cannot be empty");
+            shouldSubmit = false;
+        }
+
+        if (!passwordConfirmation.equals(password)) {
+            confirmPasswordEt.setError("Passwords do not match");
+            shouldSubmit = false;
+        }
+
+        return shouldSubmit;
     }
 
     private void openCamera() {

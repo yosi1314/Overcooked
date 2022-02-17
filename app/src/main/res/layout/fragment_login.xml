@@ -24,7 +24,7 @@
         android:id="@+id/linearLayoutCompat"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_margin="30dp"
+        android:layout_margin="10dp"
         android:layout_marginTop="16dp"
         android:orientation="vertical"
         app:layout_constraintEnd_toEndOf="parent"
@@ -36,13 +36,13 @@
             android:layout_height="wrap_content"
             android:layout_margin="4dp"
             android:hint="@string/email"
-            android:paddingTop="16dp"
+            android:paddingTop="8dp"
             app:hintTextColor="@color/white"
             android:textColorHint="@color/white"
             style="@style/Overcooked.TextInputLayoutStyle">
 
             <com.google.android.material.textfield.TextInputEditText
-                android:id="@+id/login_email_tv"
+                android:id="@+id/login_email_et"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:inputType="textEmailAddress"
@@ -56,13 +56,13 @@
             android:layout_height="wrap_content"
             android:layout_margin="4dp"
             android:hint="@string/password"
-            android:paddingTop="16dp"
+            android:paddingTop="8dp"
             app:hintTextColor="@color/white"
             android:textColorHint="@color/white"
             style="@style/Overcooked.TextInputLayoutStyle">
 
             <com.google.android.material.textfield.TextInputEditText
-                android:id="@+id/login_password_tv"
+                android:id="@+id/login_password_et"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:inputType="textPassword"
@@ -81,16 +81,22 @@
             android:textColor="#000000"
             app:backgroundTint="@color/OvercookedYellow" />
 
-        <TextView
-            android:id="@+id/login_signup_tv"
+        <com.google.android.flexbox.FlexboxLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="8dp"
-            android:linksClickable="true"
-            android:text="@string/new_here_sign_up"
-            android:textAlignment="center"
-            android:textColor="@color/white"
-            android:textSize="16sp" />
+            android:layout_height="match_parent"
+            app:justifyContent="center">
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/login_signup_btn"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:linksClickable="true"
+                android:text="@string/new_here_sign_up"
+                android:textAlignment="center"
+                android:textAllCaps="false"
+                android:textColor="@color/white"
+                android:textSize="14sp" />
+        </com.google.android.flexbox.FlexboxLayout>
 
     </androidx.appcompat.widget.LinearLayoutCompat>
 

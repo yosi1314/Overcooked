@@ -4,11 +4,6 @@ import android.app.Activity;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.os.Bundle;
-
-import androidx.annotation.Nullable;
-import androidx.fragment.app.Fragment;
-import androidx.navigation.Navigation;
-
 import android.provider.MediaStore;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -18,12 +13,17 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
 
+import androidx.annotation.Nullable;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.fragment.app.Fragment;
+import androidx.navigation.Navigation;
+
 import com.example.overcooked.R;
 import com.example.overcooked.model.Model;
 import com.example.overcooked.model.Post;
+import com.getbase.floatingactionbutton.FloatingActionButton;
 import com.squareup.picasso.Picasso;
 
-import java.io.FileNotFoundException;
 import java.io.IOException;
 
 
@@ -32,11 +32,14 @@ public class CreatePostFragment extends Fragment {
     private static final int REQUEST_GALLERY = 2;
 
     Post post;
+    boolean isPostCreation;
 
     EditText titleEt;
     EditText descriptionEt;
     EditText contentEt;
     ImageView imageImv;
+    FloatingActionButton cameraBtn;
+    FloatingActionButton galleryBtn;
     Bitmap imageBitmap;
     Button actionBtn;
     ProgressBar progressBar;
@@ -46,24 +49,36 @@ public class CreatePostFragment extends Fragment {
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_create_post, container, false);
 
+        post = CreatePostFragmentArgs.fromBundle(getArguments()).getPost();
+
+        isPostCreation = post.getId() == null;
+
+        ((AppCompatActivity) getActivity()).getSupportActionBar().setTitle(isPostCreation ? "Create New Post" : "Edit Post");
+
         titleEt = view.findViewById(R.id.create_post_title_tv);
         descriptionEt = view.findViewById(R.id.create_post_description_tv);
         contentEt = view.findViewById(R.id.create_post_content_tv);
         imageImv = view.findViewById(R.id.create_post_imv);
+        cameraBtn = view.findViewById(R.id.create_post_camera_button);
+        galleryBtn = view.findViewById(R.id.create_post_gallery_button);
         actionBtn = view.findViewById(R.id.create_post_done_btn);
         progressBar = view.findViewById(R.id.create_post_progress_bar);
         progressBar.setVisibility(View.GONE);
 
-        imageImv.setOnClickListener(v -> {
+        galleryBtn.setOnClickListener(v -> {
             openGallery();
+        });
+
+        cameraBtn.setOnClickListener(v -> {
+            openCamera();
         });
 
         actionBtn.setOnClickListener(v -> {
             create();
         });
 
-        post = CreatePostFragmentArgs.fromBundle(getArguments()).getPost();
-        if (post.getId() != null) {
+
+        if (!isPostCreation) {
             titleEt.setText(post.getTitle());
             descriptionEt.setText(post.getDescription());
             contentEt.setText(post.getContent());
@@ -81,7 +96,6 @@ public class CreatePostFragment extends Fragment {
     private void openGallery() {
         Intent intent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
         startActivityForResult(intent, REQUEST_GALLERY);
-
     }
 
     private void openCamera() {
@@ -112,29 +126,54 @@ public class CreatePostFragment extends Fragment {
     }
 
     private void create() {
-        progressBar.setVisibility(View.VISIBLE);
-        actionBtn.setEnabled(false);
+
         String title = titleEt.getText().toString();
         String description = descriptionEt.getText().toString();
         String content = contentEt.getText().toString();
         String author = Model.instance.getCurrentUserUID();
         String id = post.getId() == null ? java.util.UUID.randomUUID().toString() : post.getId();
 
-        Post newPost = new Post(id, title, description, author, content);
-        if (imageBitmap != null) {
-            Model.instance.uploadImage(imageBitmap, id + ".jpg", getString(R.string.storage_posts), url -> {
-                newPost.setImg(url);
+        boolean shouldSubmit = isShouldSubmit(title, description, content);
+
+        if (shouldSubmit) {
+            progressBar.setVisibility(View.VISIBLE);
+            actionBtn.setEnabled(false);
+            Post newPost = new Post(id, title, description, author, content);
+            if (imageBitmap != null) {
+                Model.instance.uploadImage(imageBitmap, id + ".jpg", getString(R.string.storage_posts), url -> {
+                    newPost.setImg(url);
+                    handleUserAction(newPost);
+                });
+            } else {
+                newPost.setImg(post.getImg());
                 handleUserAction(newPost);
-            });
-        } else {
-            newPost.setImg(post.getImg());
-            handleUserAction(newPost);
+            }
+        }
+    }
+
+    private boolean isShouldSubmit(String title, String description, String content) {
+        boolean shouldSubmit = true;
+
+        if (title.isEmpty()) {
+            titleEt.setError("Title cannot be empty");
+            shouldSubmit = false;
         }
 
+        if (description.isEmpty()) {
+            descriptionEt.setError("Description cannot be empty");
+            shouldSubmit = false;
+        }
+
+        if (content.isEmpty()) {
+            contentEt.setError("Content cannot be empty");
+            shouldSubmit = false;
+        }
+
+        return shouldSubmit;
     }
 
     private void handleUserAction(Post newPost) {
-        if (post.getId() == null) {
+        if (isPostCreation) {
             Model.instance.addPost(newPost, () -> {
                 Navigation.findNavController(titleEt).navigateUp();
             });
