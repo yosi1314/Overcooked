@@ -18,22 +18,27 @@ import androidx.fragment.app.Fragment;
 import androidx.navigation.Navigation;
 
 import com.example.overcooked.R;
+import com.example.overcooked.helpers.ImageHelper;
 import com.example.overcooked.helpers.IntentHelper;
 import com.example.overcooked.model.Model;
 import com.example.overcooked.model.User;
+import com.getbase.floatingactionbutton.FloatingActionButton;
 
-public class RegisterFragment extends Fragment {
-    private static final int REQUEST_CAMERA = 1;
-    private static final int REQUEST_GALLERY = 2;
+public class RegisterFragment extends ImageHelper {
+
     EditText displayNameEt;
     EditText emailEt;
     EditText passwordEt;
     EditText confirmPasswordEt;
     Button registerButton;
     Button goToSignIn;
+
+    FloatingActionButton galleryBtn;
+    FloatingActionButton cameraBtn;
     ImageView userImageImv;
     Bitmap imageBitmap;
-    private IntentHelper intentHelper = new IntentHelper();
+
+    private final IntentHelper intentHelper = new IntentHelper();
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -48,8 +53,12 @@ public class RegisterFragment extends Fragment {
         registerButton = view.findViewById(R.id.register_signup_btn);
         goToSignIn = view.findViewById(R.id.register_signin_btn);
 
+        galleryBtn = view.findViewById(R.id.register_gallery_button);
+        cameraBtn = view.findViewById(R.id.register_camera_button);
         userImageImv = view.findViewById(R.id.register_image_imv);
-        userImageImv.setOnClickListener(v -> openCamera());
+
+        galleryBtn.setOnClickListener(v -> openGallery());
+        cameraBtn.setOnClickListener(v -> openCamera());
 
         goToSignIn.setOnClickListener(v -> Navigation.findNavController(v).navigateUp());
 
@@ -136,28 +145,9 @@ public class RegisterFragment extends Fragment {
         return shouldSubmit;
     }
 
-    private void openCamera() {
-        Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-        startActivityForResult(intent, REQUEST_CAMERA);
-    }
-
-
     @Override
     public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if (requestCode == REQUEST_GALLERY) {
-            if (resultCode == Activity.RESULT_OK) {
-                Bundle extras = data.getExtras();
-                imageBitmap = (Bitmap) extras.get("data");
-                userImageImv.setImageBitmap(imageBitmap);
-            }
-        } else if (requestCode == REQUEST_CAMERA) {
-            if (resultCode == Activity.RESULT_OK) {
-                Bundle extras = data.getExtras();
-                imageBitmap = (Bitmap) extras.get("data");
-                userImageImv.setImageBitmap(imageBitmap);
-
-            }
-        }
+        imageBitmap = onResult(requestCode, resultCode, data, userImageImv);
     }
 }

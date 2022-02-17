@@ -19,17 +19,13 @@ import androidx.fragment.app.Fragment;
 import androidx.navigation.Navigation;
 
 import com.example.overcooked.R;
+import com.example.overcooked.helpers.ImageHelper;
 import com.example.overcooked.model.Model;
 import com.example.overcooked.model.Post;
 import com.getbase.floatingactionbutton.FloatingActionButton;
 import com.squareup.picasso.Picasso;
 
-import java.io.IOException;
-
-
-public class CreatePostFragment extends Fragment {
-    private static final int REQUEST_CAMERA = 1;
-    private static final int REQUEST_GALLERY = 2;
+public class CreatePostFragment extends ImageHelper {
 
     Post post;
     boolean isPostCreation;
@@ -37,9 +33,9 @@ public class CreatePostFragment extends Fragment {
     EditText titleEt;
     EditText descriptionEt;
     EditText contentEt;
-    ImageView imageImv;
     FloatingActionButton cameraBtn;
     FloatingActionButton galleryBtn;
+    ImageView imageImv;
     Bitmap imageBitmap;
     Button actionBtn;
     ProgressBar progressBar;
@@ -93,40 +89,13 @@ public class CreatePostFragment extends Fragment {
         return view;
     }
 
-    private void openGallery() {
-        Intent intent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
-        startActivityForResult(intent, REQUEST_GALLERY);
-    }
-
-    private void openCamera() {
-        Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-        startActivityForResult(intent, REQUEST_CAMERA);
-    }
-
-
     @Override
     public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if (requestCode == REQUEST_GALLERY) {
-            if (resultCode == Activity.RESULT_OK) {
-                if (data != null) {
-                    try {
-                        imageBitmap = MediaStore.Images.Media.getBitmap(getActivity().getContentResolver(), data.getData());
-                        imageImv.setImageBitmap(imageBitmap);
-                    } catch (IOException e) {
-                        e.printStackTrace();
-                    }
-                }
-            }
-        } else if (requestCode == REQUEST_CAMERA) {
-            Bundle extras = data.getExtras();
-            imageBitmap = (Bitmap) extras.get("data");
-            imageImv.setImageBitmap(imageBitmap);
-        }
+        imageBitmap = onResult(requestCode, resultCode, data, imageImv);
     }
 
     private void create() {
-
         String title = titleEt.getText().toString();
         String description = descriptionEt.getText().toString();
         String content = contentEt.getText().toString();

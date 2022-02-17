@@ -14,18 +14,16 @@ import android.widget.ImageView;
 import android.widget.ProgressBar;
 
 import androidx.annotation.Nullable;
-import androidx.fragment.app.Fragment;
 import androidx.navigation.Navigation;
 
 import com.example.overcooked.R;
+import com.example.overcooked.helpers.ImageHelper;
 import com.example.overcooked.model.Model;
 import com.example.overcooked.model.User;
 import com.getbase.floatingactionbutton.FloatingActionButton;
 import com.squareup.picasso.Picasso;
 
-public class EditProfileFragment extends Fragment {
-    private static final int REQUEST_CAMERA = 1;
-    private static final int REQUEST_GALLERY = 2;
+public class EditProfileFragment extends ImageHelper {
 
     User user;
     ImageView profileImageImv;
@@ -77,37 +75,10 @@ public class EditProfileFragment extends Fragment {
         emailEt.setText(user.getEmail());
     }
 
-    private void openGallery() {
-        Intent intent = new Intent();
-        intent.setAction(Intent.ACTION_VIEW);
-        intent.setType("image/*");
-        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-        startActivityForResult(intent, REQUEST_GALLERY);
-
-    }
-
-    private void openCamera() {
-        Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-        startActivityForResult(intent, REQUEST_CAMERA);
-    }
-
     @Override
     public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if (requestCode == REQUEST_GALLERY) {
-            if (resultCode == Activity.RESULT_OK) {
-                Bundle extras = data.getExtras();
-                imageBitmap = (Bitmap) extras.get("data");
-                profileImageImv.setImageBitmap(imageBitmap);
-            }
-        } else if (requestCode == REQUEST_CAMERA) {
-            if (resultCode == Activity.RESULT_OK) {
-                Bundle extras = data.getExtras();
-                imageBitmap = (Bitmap) extras.get("data");
-                profileImageImv.setImageBitmap(imageBitmap);
-
-            }
-        }
+        imageBitmap = onResult(requestCode, resultCode, data, profileImageImv);
     }
 
     private void update() {
