@@ -21,11 +21,15 @@ import android.widget.ProgressBar;
 import com.example.overcooked.R;
 import com.example.overcooked.model.Model;
 import com.example.overcooked.model.Post;
+import com.squareup.picasso.Picasso;
 
 
 public class CreatePostFragment extends Fragment {
     private static final int REQUEST_CAMERA = 1;
     private static final int REQUEST_GALLERY = 2;
+
+    Post post;
+
     EditText titleEt;
     EditText descriptionEt;
     EditText contentEt;
@@ -55,6 +59,17 @@ public class CreatePostFragment extends Fragment {
             create();
         });
 
+        post = CreatePostFragmentArgs.fromBundle(getArguments()).getPost();
+        if(post.getId() != null){
+            titleEt.setText(post.getTitle());
+            descriptionEt.setText(post.getDescription());
+            contentEt.setText(post.getContent());
+            if(post.getImg() != null){
+                Picasso.get().load(post.getImg()).into(imageImv);
+            } else {
+                imageImv.setImageResource(R.drawable.main_logo);
+            }
+        }
 
         return view;
     }
@@ -107,7 +122,6 @@ public class CreatePostFragment extends Fragment {
                 Bundle extras = data.getExtras();
                 imageBitmap = (Bitmap) extras.get("data");
                 imageImv.setImageBitmap(imageBitmap);
-
             }
         }
     }
@@ -119,21 +133,30 @@ public class CreatePostFragment extends Fragment {
         String description = descriptionEt.getText().toString();
         String content = contentEt.getText().toString();
         String author = Model.instance.getCurrentUserUID();
-        String id = java.util.UUID.randomUUID().toString();
+        String id = post.getId() == null ? java.util.UUID.randomUUID().toString() : post.getId();
 
-        Post post = new Post(id, title, description, author, content);
+        Post newPost = new Post(id, title, description, author, content);
         if(imageBitmap != null){
             Model.instance.uploadImage(imageBitmap, id + ".jpg", getString(R.string.storage_posts), url -> {
-                post.setImg(url);
-                Model.instance.addPost(post, () -> {
-                    Navigation.findNavController(titleEt).navigateUp();
-                });
+                newPost.setImg(url);
+                handleUserAction(newPost);
             });
         } else {
-            Model.instance.addPost(post, () -> {
+            newPost.setImg(post.getImg());
+            handleUserAction(newPost);
+        }
+
+    }
+
+    private void handleUserAction(Post newPost) {
+        if(post.getId() == null){
+            Model.instance.addPost(newPost, () -> {
+                Navigation.findNavController(titleEt).navigateUp();
+            });
+        } else {
+            Model.instance.updatePost(newPost, () -> {
                 Navigation.findNavController(titleEt).navigateUp();
             });
         }
-
     }
 }

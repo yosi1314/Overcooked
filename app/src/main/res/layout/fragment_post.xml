@@ -76,33 +76,33 @@
         android:layout_alignParentEnd="true"
         android:layout_alignParentRight="true"
         android:layout_alignParentBottom="true"
-        app:fab_addButtonColorNormal="@color/white"
+        app:fab_addButtonColorNormal="@color/OvercookedYellow"
         app:fab_addButtonColorPressed="@color/white"
-        app:fab_addButtonPlusIconColor="@color/black"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
+        app:fab_addButtonPlusIconColor="@color/white"
+        app:fab_labelStyle="@style/menu_labels_style"
         app:fab_labelsPosition="left"
-        app:fab_labelStyle="@style/menu_labels_style">
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent">
 
         <com.getbase.floatingactionbutton.FloatingActionButton
             android:id="@+id/single_post_edit_fab"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            app:fab_colorNormal="@color/white"
-            app:fab_colorPressed="@color/white"
+            app:fab_colorNormal="#DCFDAF01"
+            app:fab_colorPressed="#DCFDAF01"
             app:fab_icon="@android:drawable/ic_menu_edit"
             app:fab_size="mini"
-            app:fab_title="Action A" />
+            app:fab_title="Edit Post"/>
 
         <com.getbase.floatingactionbutton.FloatingActionButton
             android:id="@+id/single_post_delete_fab"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            app:fab_colorNormal="@color/white"
-            app:fab_colorPressed="@color/white"
-            app:fab_title="Delete post"
+            app:fab_colorNormal="#DCFDAF01"
+            app:fab_colorPressed="#DCFDAF01"
+            app:fab_icon="@android:drawable/ic_menu_delete"
             app:fab_size="mini"
-            app:fab_icon="@android:drawable/ic_menu_delete" />
+            app:fab_title="Delete post"/>
 
     </com.getbase.floatingactionbutton.FloatingActionsMenu>
 

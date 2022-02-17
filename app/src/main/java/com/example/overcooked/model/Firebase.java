@@ -4,18 +4,11 @@ import android.graphics.Bitmap;
 import android.net.Uri;
 import android.util.Log;
 
-import androidx.annotation.NonNull;
-
-import com.example.overcooked.R;
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.OnFailureListener;
-import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.Timestamp;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
-import com.google.firebase.auth.UserProfileChangeRequest;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.FirebaseFirestoreSettings;
@@ -65,6 +58,15 @@ public class Firebase {
                 .set(json)
                 .addOnSuccessListener(unused -> listener.onComplete())
                 .addOnFailureListener(e -> listener.onComplete());
+    }
+
+    public void updatePost(Post post, Model.UpdatePostListener listener) {
+        Map<String, Object> json = post.toJson();
+        db.collection(Post.COLLECTION_NAME).document(post.id)
+                .set(json).addOnCompleteListener(task -> {
+            listener.onComplete();
+            Model.instance.refreshPostsList();
+        });
     }
 
     public void createUser(User user, Model.AddUserListener listener) {
@@ -149,5 +151,12 @@ public class Firebase {
                     }
                     listener.onComplete(user);
                 });
+    }
+
+    public void deletePost(String id, Model.DeletePostListener listener) {
+        db.collection(Post.COLLECTION_NAME)
+                .document(id).delete().addOnCompleteListener(task -> {
+                    listener.onComplete();
+        });
     }
 }

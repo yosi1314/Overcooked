@@ -24,7 +24,7 @@
     </style>
 
     <style name="menu_labels_style">
-        <item name="android:background">@color/browser_actions_bg_grey</item>
+        <item name="android:background">@drawable/fab_label_background</item>
         <item name="android:textColor">@color/white</item>
     </style>
 

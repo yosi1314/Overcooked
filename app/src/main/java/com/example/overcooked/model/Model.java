@@ -26,7 +26,6 @@ public class Model {
 
     MutableLiveData<List<Post>> posts = new MutableLiveData<List<Post>>();
 
-
     public enum PostListLoadingState {
         loading,
         loaded
@@ -114,10 +113,42 @@ public class Model {
         firebase.updateUser(user, listener);
     }
 
+    public void updatePost(Post post, Model.UpdatePostListener listener) {
+        firebase.updatePost(post, () -> {
+            updateLocalPost(post, listener);
+        });
+    }
+
+    public void updateLocalPost(Post post, Model.UpdatePostListener listener){
+        executor.execute(() -> {
+            LocalDb.db.postDao().updatePost(post);
+            mainThread.post(() -> {
+                listener.onComplete();
+                refreshPostsList();
+            });
+        });
+    }
+
     public void addPost(Post post, Model.AddPostListener listener) {
         firebase.addPost(post, () -> {
             listener.onComplete();
             refreshPostsList();
+        });
+    }
+
+    public void deletePost(Post post, Model.DeletePostListener listener) {
+        firebase.deletePost(post.getId(), () -> {
+            deleteLocalPost(post, listener);
+        });
+    }
+
+    public void deleteLocalPost(Post post, Model.DeletePostListener listener) {
+        executor.execute(() -> {
+            LocalDb.db.postDao().delete(post);
+            mainThread.post(() -> {
+                listener.onComplete();
+                refreshPostsList();
+            });
         });
     }
 
@@ -188,5 +219,13 @@ public class Model {
 
     public interface GetUserByUidListener {
         void onComplete(User user);
+    }
+
+    public interface UpdatePostListener {
+        void onComplete();
+    }
+
+    public interface DeletePostListener {
+        void onComplete();
     }
 }

@@ -28,15 +28,14 @@ import com.example.overcooked.R;
 import com.example.overcooked.helpers.IntentHelper;
 import com.example.overcooked.login.LoginActivity;
 import com.example.overcooked.model.Model;
+import com.example.overcooked.model.Post;
 import com.google.android.material.navigation.NavigationView;
 
 
 public class BaseActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
     NavController navCtl;
     DrawerLayout drawerLayout;
-
     NavHost navHost;
-    IntentHelper intentHelper = new IntentHelper();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -89,26 +88,18 @@ public class BaseActivity extends AppCompatActivity implements NavigationView.On
 
     @Override
     public boolean onNavigationItemSelected(@NonNull MenuItem item) {
-        Fragment fragment = null;
+        Bundle bundle = new Bundle();
         switch (item.getItemId()) {
-//            case R.id.menu_feed:
-//                fragment = new FeedFragment();
-//                break;
-//            case R.id.menu_my_posts:
-//                break;
-//            case R.id.menu_profile:
-//                break;
-//            case R.id.createPostFragment:
-////                Navigation.findNavController(navHost).navigate(R.id.action_global_createPostFragment);
-//                NavigationUI.onNavDestinationSelected(item, navCtl);
-//                break;
             case android.R.id.home:
                 navCtl.navigateUp();
                 break;
             case R.id.menu_my_posts:
-                Bundle bundle = new Bundle();
                 bundle.putString("userUid", Model.instance.getCurrentUserUID());
                 navCtl.navigate(R.id.action_global_feedFragment, bundle);
+                break;
+            case R.id.createPostFragment:
+                bundle.putSerializable("post", new Post());
+                navCtl.navigate(R.id.action_global_createPostFragment, bundle);
                 break;
             case R.id.menu_sign_out:
                 Model.instance.signOut(() -> toLoginActivity());
@@ -119,19 +110,7 @@ public class BaseActivity extends AppCompatActivity implements NavigationView.On
 
         }
 
-//        if (fragment != null) {
-//            getSupportFragmentManager().beginTransaction().replace(R.id.base_navhost,
-//                    fragment).commit();
-//        }
-
         drawerLayout.closeDrawer(GravityCompat.START);
         return true;
     }
-
-    private Fragment getForegroundFragment(int id) {
-        Fragment navHostFragment = getSupportFragmentManager().findFragmentById(id);
-        Log.d("Menuuu", "" + navHostFragment);
-        return navHostFragment == null ? null : navHostFragment.getChildFragmentManager().getFragments().get(0);
-    }
-
 }
