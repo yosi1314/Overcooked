@@ -55,16 +55,16 @@ public class BaseActivity extends AppCompatActivity implements NavigationView.On
         navView.bringToFront();
 
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(this, drawerLayout, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close) {
-          @Override
-          public void onDrawerSlide(View drawerView, float slideOffset) {
-              super.onDrawerSlide(drawerView, slideOffset);
+            @Override
+            public void onDrawerSlide(View drawerView, float slideOffset) {
+                super.onDrawerSlide(drawerView, slideOffset);
 
-              if (getCurrentFocus() != null) {
-                  InputMethodManager inputManager = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+                if (getCurrentFocus() != null) {
+                    InputMethodManager inputManager = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
 
-                  inputManager.hideSoftInputFromWindow(getCurrentFocus().getWindowToken(), InputMethodManager.HIDE_NOT_ALWAYS);
-              }
-          }
+                    inputManager.hideSoftInputFromWindow(getCurrentFocus().getWindowToken(), InputMethodManager.HIDE_NOT_ALWAYS);
+                }
+            }
         };
 
         drawerLayout.addDrawerListener(toggle);
@@ -104,6 +104,11 @@ public class BaseActivity extends AppCompatActivity implements NavigationView.On
 //                break;
             case android.R.id.home:
                 navCtl.navigateUp();
+                break;
+            case R.id.menu_my_posts:
+                Bundle bundle = new Bundle();
+                bundle.putString("userUid", Model.instance.getCurrentUserUID());
+                navCtl.navigate(R.id.action_global_feedFragment, bundle);
                 break;
             case R.id.menu_sign_out:
                 Model.instance.signOut(() -> toLoginActivity());
