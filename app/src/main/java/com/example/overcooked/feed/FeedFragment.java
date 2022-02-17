@@ -32,7 +32,7 @@ public class FeedFragment extends Fragment {
     FeedViewModel viewModel;
     PostAdapter postAdapter;
     SwipeRefreshLayout swipeRefresh;
-    LiveData<List<Post>> liveDataPosts;
+    boolean isGlobalFeed;
 
     @Override
     public void onAttach(@NonNull Context context) {
@@ -62,15 +62,15 @@ public class FeedFragment extends Fragment {
         feed.setAdapter(postAdapter);
 
         postAdapter.setOnItemClickListener((v, position) -> {
-//            String postId = viewModel.getPosts().getValue().get(position).getId();
-            String postId = liveDataPosts.getValue().get(position).getId();
+            String postId = viewModel.getPosts().getValue().get(position).getId();
+            //String postId = liveDataPosts.getValue().get(position).getId();
             Navigation.findNavController(v).navigate(FeedFragmentDirections.actionFeedFragmentToPostFragment(postId));
         });
 
         setHasOptionsMenu(true);
 
-//        viewModel.getPosts().observe(getViewLifecycleOwner(), postList -> refresh());
-        liveDataPosts.observe(getViewLifecycleOwner(), postList -> refresh());
+        viewModel.getPosts().observe(getViewLifecycleOwner(), postList -> refresh());
+        //liveDataPosts.observe(getViewLifecycleOwner(), postList -> refresh());
         swipeRefresh.setRefreshing(Model.instance.getPostListLoadingState().getValue() == Model.PostListLoadingState.loading);
         Model.instance.getPostListLoadingState().observe(getViewLifecycleOwner(), postListLoadingState -> {
             swipeRefresh.setRefreshing(postListLoadingState == Model.PostListLoadingState.loading);
@@ -80,8 +80,7 @@ public class FeedFragment extends Fragment {
     }
 
     private void setRelevantFragmentData(){
-        boolean isGlobalFeed = userUid == null;
-        liveDataPosts = isGlobalFeed ? viewModel.getPosts() : viewModel.getMyPosts(userUid);
+        isGlobalFeed = userUid == null;
         ((AppCompatActivity)getActivity()).getSupportActionBar().setTitle(isGlobalFeed ? "Feed" : "My Posts");
     }
 
@@ -141,14 +140,16 @@ public class FeedFragment extends Fragment {
         @Override
         public void onBindViewHolder(@NonNull PostViewHolder holder, int position) {
 //            Post post = viewModel.getPosts().getValue().get(position);
-            Post post = liveDataPosts.getValue().get(position);
+            LiveData<List<Post>> data = isGlobalFeed ? viewModel.getPosts() : viewModel.getMyPosts(userUid);
+            Post post = data.getValue().get(position);
             holder.bind(post);
         }
 
         @Override
         public int getItemCount() {
 //            List<Post> data = viewModel.getPosts().getValue();
-            List<Post> data = liveDataPosts.getValue();
+            LiveData<List<Post>> viewPosts = isGlobalFeed ? viewModel.getPosts() : viewModel.getMyPosts(userUid);
+            List<Post> data = viewPosts.getValue();
             if (data == null) {
                 return 0;
             }

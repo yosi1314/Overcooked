@@ -21,9 +21,11 @@ public class FeedViewModel extends ViewModel {
     public LiveData<List<Post>> getMyPosts(String userUid) {
         List<Post> myPosts = new LinkedList<>();
         MutableLiveData<List<Post>> postsToReturn = new MutableLiveData<List<Post>>();
-        for(Post post : posts.getValue()){
-            if(post.getAuthor().equals(userUid)){
-                myPosts.add(post);
+        if (posts.getValue() != null) {
+            for(Post post : posts.getValue()){
+                if(post.getAuthor().equals(userUid)){
+                    myPosts.add(post);
+                }
             }
         }
         postsToReturn.setValue(myPosts);
