@@ -7,11 +7,12 @@ import androidx.room.PrimaryKey;
 import com.google.firebase.Timestamp;
 import com.google.firebase.firestore.FieldValue;
 
+import java.io.Serializable;
 import java.util.HashMap;
 import java.util.Map;
 
 @Entity
-public class Post {
+public class Post implements Serializable {
     final public static String COLLECTION_NAME = "posts";
     @PrimaryKey
     @NonNull
