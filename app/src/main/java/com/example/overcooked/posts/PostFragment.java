@@ -17,6 +17,11 @@ import com.getbase.floatingactionbutton.FloatingActionButton;
 import com.getbase.floatingactionbutton.FloatingActionsMenu;
 import com.squareup.picasso.Picasso;
 
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+
 public class PostFragment extends Fragment {
 
     ImageView post_image_view;
@@ -24,6 +29,8 @@ public class PostFragment extends Fragment {
     TextView post_description;
     TextView post_author;
     TextView post_content;
+    TextView postUploadDate;
+    TextView separator;
     FloatingActionsMenu fabMenu;
     FloatingActionButton editFab;
     FloatingActionButton deleteFab;
@@ -43,6 +50,8 @@ public class PostFragment extends Fragment {
         post_description = view.findViewById(R.id.single_post_desc_tv);
         post_author = view.findViewById(R.id.single_post_author_tv);
         post_content = view.findViewById(R.id.single_post_content_tv);
+        postUploadDate = view.findViewById(R.id.single_post_upload_date_tv);
+        separator = view.findViewById(R.id.single_post_separator);
         fabMenu = view.findViewById(R.id.single_post_fab_menu);
         editFab = view.findViewById(R.id.single_post_edit_button);
         deleteFab = view.findViewById(R.id.single_post_delete_fab);
@@ -84,6 +93,12 @@ public class PostFragment extends Fragment {
         }
         getAuthorData();
         post_title.setText(post.getTitle());
+        try {
+            postUploadDate.setText(getDate(post.getUploadDate()));
+        } catch (ParseException e) {
+            postUploadDate.setVisibility(View.GONE);
+            separator.setVisibility(View.GONE);
+        }
         post_description.setText(post.getDescription());
         post_content.setText(post.getContent());
     }
@@ -93,5 +108,12 @@ public class PostFragment extends Fragment {
         Model.instance.getUserById(post.getAuthor(), user -> {
             post_author.setText(user.getDisplayName());
         });
+    }
+
+    private String getDate(Long uploadDate) throws ParseException {
+        Date date = new Date(uploadDate * 1000);
+        DateFormat formatter = new SimpleDateFormat("dd/MM/yyyy HH:mm");
+
+        return formatter.format(date);
     }
 }

@@ -190,5 +190,14 @@
 
     </androidx.appcompat.widget.LinearLayoutCompat>
 
-
+    <ProgressBar
+        android:id="@+id/create_post_progress_bar"
+        style="?android:attr/progressBarStyle"
+        android:layout_width="160dp"
+        android:layout_height="160dp"
+        android:indeterminateTint="@color/OvercookedYellow"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 </androidx.constraintlayout.widget.ConstraintLayout>

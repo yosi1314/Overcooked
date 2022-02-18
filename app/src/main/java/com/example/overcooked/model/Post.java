@@ -8,6 +8,7 @@ import com.google.firebase.Timestamp;
 import com.google.firebase.firestore.FieldValue;
 
 import java.io.Serializable;
+import java.lang.reflect.Field;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -23,7 +24,7 @@ public class Post implements Serializable {
     String content = "";
     String img;
     Long updateDate = new Long(0);
-
+    Long uploadDate = new Long(0);
 
     public Post() { }
 
@@ -91,14 +92,25 @@ public class Post implements Serializable {
         this.updateDate = updateDate;
     }
 
+
+    public void setUploadDate(Long uploadDate) {
+        this.uploadDate = uploadDate;
+    }
+
+    public Long getUploadDate() {
+        return uploadDate;
+    }
+
     public Map<String, Object> toJson() {
         Map<String, Object> json = new HashMap<String, Object>();
+        FieldValue timestamp = FieldValue.serverTimestamp();
         json.put("id", id);
         json.put("title", title);
         json.put("description", description);
         json.put("author", author);
         json.put("content", content);
-        json.put("updateDate", FieldValue.serverTimestamp());
+        json.put("updateDate", timestamp);
+        json.put("uploadDate", timestamp);
         json.put("image", img);
 
         return json;
@@ -110,14 +122,16 @@ public class Post implements Serializable {
         String desc = (String) json.get("description");
         String content = (String) json.get("content");
         String author = (String) json.get("author");
-        Timestamp ts = (Timestamp)json.get("updateDate");
-        Long updateDate = ts.getSeconds();
+        Timestamp uploadTs = (Timestamp)json.get("uploadDate");
+        Timestamp updateTs = (Timestamp)json.get("updateDate");
+        Long uploadDate = uploadTs.getSeconds();
+        Long updateDate = updateTs.getSeconds();
         String img = (String)json.get("image");
 
         Post post = new Post(id, title, desc, author, content);
         post.setUpdateDate(updateDate);
+        post.setUploadDate(uploadDate);
         post.setImg(img);
         return post;
     }
-
 }

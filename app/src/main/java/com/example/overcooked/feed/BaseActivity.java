@@ -127,23 +127,30 @@ public class BaseActivity extends AppCompatActivity implements NavigationView.On
     @Override
     public boolean onNavigationItemSelected(@NonNull MenuItem item) {
         Bundle bundle = new Bundle();
-        switch (item.getItemId()) {
-            case android.R.id.home:
-                navCtl.navigateUp();
-                break;
-            case R.id.menu_my_posts:
-                bundle.putString("userUid", Model.instance.getCurrentUserUID());
-                navCtl.navigate(R.id.action_global_feedFragment, bundle);
-                break;
-            case R.id.menu_sign_out:
-                Model.instance.signOut(() -> toLoginActivity());
-                break;
-            default:
-                NavigationUI.onNavDestinationSelected(item, navCtl);
-                break;
+        if(item.getItemId() != navCtl.getCurrentDestination().getId()){
+            switch (item.getItemId()) {
+                case android.R.id.home:
+                    navCtl.navigateUp();
+                    break;
+                case R.id.menu_feed:
+                    navCtl.navigate(R.id.action_global_feedFragment);
+                    break;
+                case R.id.menu_my_posts:
+                    bundle.putString("userUid", Model.instance.getCurrentUserUID());
+                    navCtl.navigate(R.id.action_global_feedFragment, bundle);
+                    break;
+                case R.id.menu_sign_out:
+                    Model.instance.signOut(() -> toLoginActivity());
+                    break;
+                default:
+                    NavigationUI.onNavDestinationSelected(item, navCtl);
+                    break;
+            }
         }
 
         drawerLayout.closeDrawer(GravityCompat.START);
         return true;
     }
+
+
 }
