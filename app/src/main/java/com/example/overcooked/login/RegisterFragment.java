@@ -1,30 +1,26 @@
 package com.example.overcooked.login;
 
-import android.app.Activity;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.os.Bundle;
-import android.provider.MediaStore;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
-import android.widget.TextView;
 
 import androidx.annotation.Nullable;
-import androidx.fragment.app.Fragment;
 import androidx.navigation.Navigation;
 
 import com.example.overcooked.R;
-import com.example.overcooked.helpers.ImageHelper;
+import com.example.overcooked.helpers.ImageHandlerFragment;
 import com.example.overcooked.helpers.IntentHelper;
 import com.example.overcooked.model.Model;
 import com.example.overcooked.model.User;
 import com.getbase.floatingactionbutton.FloatingActionButton;
 
-public class RegisterFragment extends ImageHelper {
+public class RegisterFragment extends ImageHandlerFragment {
 
     EditText displayNameEt;
     EditText emailEt;

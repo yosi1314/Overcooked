@@ -1,10 +1,8 @@
 package com.example.overcooked.profile;
 
-import android.app.Activity;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.os.Bundle;
-import android.provider.MediaStore;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -17,13 +15,13 @@ import androidx.annotation.Nullable;
 import androidx.navigation.Navigation;
 
 import com.example.overcooked.R;
-import com.example.overcooked.helpers.ImageHelper;
+import com.example.overcooked.helpers.ImageHandlerFragment;
 import com.example.overcooked.model.Model;
 import com.example.overcooked.model.User;
 import com.getbase.floatingactionbutton.FloatingActionButton;
 import com.squareup.picasso.Picasso;
 
-public class EditProfileFragment extends ImageHelper {
+public class EditProfileFragment extends ImageHandlerFragment {
 
     User user;
     ImageView profileImageImv;

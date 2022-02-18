@@ -1,10 +1,8 @@
 package com.example.overcooked.posts;
 
-import android.app.Activity;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.os.Bundle;
-import android.provider.MediaStore;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -15,17 +13,16 @@ import android.widget.ProgressBar;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.fragment.app.Fragment;
 import androidx.navigation.Navigation;
 
 import com.example.overcooked.R;
-import com.example.overcooked.helpers.ImageHelper;
+import com.example.overcooked.helpers.ImageHandlerFragment;
 import com.example.overcooked.model.Model;
 import com.example.overcooked.model.Post;
 import com.getbase.floatingactionbutton.FloatingActionButton;
 import com.squareup.picasso.Picasso;
 
-public class CreatePostFragment extends ImageHelper {
+public class CreatePostFragment extends ImageHandlerFragment {
 
     Post post;
     boolean isPostCreation;

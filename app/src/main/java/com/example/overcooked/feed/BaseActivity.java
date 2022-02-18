@@ -141,7 +141,6 @@ public class BaseActivity extends AppCompatActivity implements NavigationView.On
             default:
                 NavigationUI.onNavDestinationSelected(item, navCtl);
                 break;
-
         }
 
         drawerLayout.closeDrawer(GravityCompat.START);

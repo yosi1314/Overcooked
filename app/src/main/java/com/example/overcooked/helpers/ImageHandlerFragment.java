@@ -12,11 +12,11 @@ import androidx.fragment.app.Fragment;
 
 import java.io.IOException;
 
-public class ImageHelper extends Fragment {
+public class ImageHandlerFragment extends Fragment {
     private static final int REQUEST_CAMERA = 1;
     private static final int REQUEST_GALLERY = 2;
 
-    public ImageHelper(){}
+    public ImageHandlerFragment(){}
 
     public void openCamera() {
         Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
