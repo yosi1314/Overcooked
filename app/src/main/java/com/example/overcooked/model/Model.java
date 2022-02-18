@@ -11,7 +11,12 @@ import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 
 import com.example.overcooked.MyApplication;
-import com.google.firebase.auth.FirebaseUser;
+import com.example.overcooked.model.enums.PostListLoadingState;
+import com.example.overcooked.model.interfaces.EmptyOnCompleteListener;
+import com.example.overcooked.model.interfaces.FirebaseUserOnCompleteListener;
+import com.example.overcooked.model.interfaces.ImageOnCompleteListener;
+import com.example.overcooked.model.interfaces.SinglePostOnCompleteListener;
+import com.example.overcooked.model.interfaces.UserOnCompleteListener;
 
 import java.util.List;
 import java.util.concurrent.Executor;
@@ -21,21 +26,10 @@ public class Model {
     public static Model instance = new Model();
     public Executor executor = Executors.newFixedThreadPool(1);
     public Handler mainThread = HandlerCompat.createAsync(Looper.getMainLooper());
-
     public Firebase firebase = new Firebase();
 
-    MutableLiveData<List<Post>> posts = new MutableLiveData<List<Post>>();
-
-    public enum PostListLoadingState {
-        loading,
-        loaded
-    }
-
-
-
-    
-
-    MutableLiveData<PostListLoadingState> postListLoadingState = new MutableLiveData<PostListLoadingState>();
+    MutableLiveData<List<Post>> posts = new MutableLiveData<>();
+    MutableLiveData<PostListLoadingState> postListLoadingState = new MutableLiveData<>();
 
     public MutableLiveData<PostListLoadingState> getPostListLoadingState() {
         return postListLoadingState;
@@ -53,13 +47,30 @@ public class Model {
         return firebase.isUserSignedIn();
     }
 
-    public void getAllPosts(GetAllPostsListener listener) {
-        executor.execute(() -> {
-            List<Post> posts = LocalDb.db.postDao().getAll();
-            mainThread.post(() -> {
-                listener.onComplete(posts);
-            });
+    public void createUser(User user, EmptyOnCompleteListener listener) {
+        firebase.createUser(user, () -> {
+            listener.onComplete();
         });
+    }
+
+    public void updateUser(User user, EmptyOnCompleteListener listener) {
+        firebase.updateUser(user, listener);
+    }
+
+    public void signIn(String email, String password, FirebaseUserOnCompleteListener listener) {
+        firebase.signIn(email, password, listener);
+    }
+
+    public void signUp(String email, String password, FirebaseUserOnCompleteListener listener) {
+        firebase.register(email, password, listener);
+    }
+
+    public void signOut(EmptyOnCompleteListener listener) {
+        firebase.signOut(listener);
+    }
+
+    public void getUserById(String uid, UserOnCompleteListener listener) {
+        firebase.getUserByUid(uid, listener);
     }
 
     public LiveData<List<Post>> getAll() {
@@ -107,23 +118,26 @@ public class Model {
         });
     }
 
-    public void createUser(User user, Model.AddUserListener listener) {
-        firebase.createUser(user, () -> {
+    public void addPost(Post post, EmptyOnCompleteListener listener) {
+        firebase.addPost(post, () -> {
             listener.onComplete();
+            refreshPostsList();
         });
     }
 
-    public void updateUser(User user, Model.UpdateUserListener listener) {
-        firebase.updateUser(user, listener);
-    }
-
-    public void updatePost(Post post, Model.UpdatePostListener listener) {
+    public void updatePost(Post post, EmptyOnCompleteListener listener) {
         firebase.updatePost(post, () -> {
             updateLocalPost(post, listener);
         });
     }
 
-    public void updateLocalPost(Post post, Model.UpdatePostListener listener){
+    public void deletePost(Post post, EmptyOnCompleteListener listener) {
+        firebase.deletePost(post.getId(), () -> {
+            deleteLocalPost(post, listener);
+        });
+    }
+
+    public void updateLocalPost(Post post, EmptyOnCompleteListener listener){
         executor.execute(() -> {
             LocalDb.db.postDao().updatePost(post);
             mainThread.post(() -> {
@@ -133,20 +147,7 @@ public class Model {
         });
     }
 
-    public void addPost(Post post, Model.AddPostListener listener) {
-        firebase.addPost(post, () -> {
-            listener.onComplete();
-            refreshPostsList();
-        });
-    }
-
-    public void deletePost(Post post, Model.DeletePostListener listener) {
-        firebase.deletePost(post.getId(), () -> {
-            deleteLocalPost(post, listener);
-        });
-    }
-
-    public void deleteLocalPost(Post post, Model.DeletePostListener listener) {
+    public void deleteLocalPost(Post post, EmptyOnCompleteListener listener) {
         executor.execute(() -> {
             LocalDb.db.postDao().delete(post);
             mainThread.post(() -> {
@@ -156,7 +157,7 @@ public class Model {
         });
     }
 
-    public void getPostById(String id, Model.GetPostByIdListener listener) {
+    public void getPostById(String id, SinglePostOnCompleteListener listener) {
         executor.execute(() -> {
             Post post = LocalDb.db.postDao().getPostById(id);
             mainThread.post(() -> {
@@ -165,71 +166,7 @@ public class Model {
         });
     }
 
-    public void uploadImage(Bitmap imageBitmap, String imageName, String storageLocation, Model.UploadImageListener listener) {
+    public void uploadImage(Bitmap imageBitmap, String imageName, String storageLocation, ImageOnCompleteListener listener) {
         firebase.uploadImage(imageBitmap, imageName, storageLocation, listener);
-    }
-
-    public void signIn(String email, String password, UserAuthentication listener) {
-        firebase.signIn(email, password, listener);
-    }
-
-    public void signUp(String email, String password, UserAuthentication listener) {
-        firebase.register(email, password, listener);
-    }
-
-    public void signOut(UserSignOut listener) {
-        firebase.signOut(listener);
-    }
-
-    public void getUserById(String uid, GetUserByUidListener listener) {
-        firebase.getUserByUid(uid, listener);
-    }
-
-    public interface UserAuthentication {
-        void onComplete(FirebaseUser user);
-    }
-
-    public interface UserSignOut {
-        void onComplete();
-    }
-
-    public interface GetPostsListener {
-        void onComplete(List<Post> posts);
-    }
-
-    public interface GetAllPostsListener {
-        void onComplete(List<Post> posts);
-    }
-
-    public interface AddPostListener {
-        void onComplete();
-    }
-
-    public interface GetPostByIdListener {
-        void onComplete(Post post);
-    }
-
-    public interface UploadImageListener {
-        void onComplete(String url);
-    }
-
-    public interface AddUserListener {
-        void onComplete();
-    }
-
-    public interface UpdateUserListener {
-        void onComplete();
-    }
-
-    public interface GetUserByUidListener {
-        void onComplete(User user);
-    }
-
-    public interface UpdatePostListener {
-        void onComplete();
-    }
-
-    public interface DeletePostListener {
-        void onComplete();
     }
 }

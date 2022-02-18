@@ -75,21 +75,6 @@ public class RegisterFragment extends ImageHandlerFragment {
 
         boolean shouldSubmit = isShouldSubmit(displayName, email, password, passwordConfirmation);
 
-        if (displayName == null) {
-            displayNameEt.setError("Display name cannot be empty");
-            return;
-        }
-
-        if (!android.util.Patterns.EMAIL_ADDRESS.matcher(email).matches()) {
-            emailEt.setError("Email is not valid");
-            return;
-        }
-
-        if (!password.equals(passwordConfirmation)) {
-            confirmPasswordEt.setError("Passwords do not match");
-            return;
-        }
-
         if (shouldSubmit) {
             showProgressBar(progressBar);
             Model.instance.signUp(email, password, user -> {

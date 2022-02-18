@@ -4,6 +4,11 @@ import android.graphics.Bitmap;
 import android.net.Uri;
 import android.util.Log;
 
+import com.example.overcooked.model.interfaces.EmptyOnCompleteListener;
+import com.example.overcooked.model.interfaces.FirebaseUserOnCompleteListener;
+import com.example.overcooked.model.interfaces.ImageOnCompleteListener;
+import com.example.overcooked.model.interfaces.PostsOnCompleteListener;
+import com.example.overcooked.model.interfaces.UserOnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.Timestamp;
 import com.google.firebase.auth.AuthResult;
@@ -16,6 +21,7 @@ import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
+import com.google.protobuf.Empty;
 
 import java.io.ByteArrayOutputStream;
 import java.util.LinkedList;
@@ -33,7 +39,7 @@ public class Firebase {
         db.setFirestoreSettings(settings);
     }
 
-    public void getPosts(Long lastUpdateDate, Model.GetPostsListener listener) {
+    public void getPosts(Long lastUpdateDate, PostsOnCompleteListener listener) {
         db.collection(Post.COLLECTION_NAME)
                 .whereGreaterThanOrEqualTo("updateDate", new Timestamp(lastUpdateDate, 0))
                 .get()
@@ -51,7 +57,7 @@ public class Firebase {
                 });
     }
 
-    public void addPost(Post post, Model.AddPostListener listener) {
+    public void addPost(Post post, EmptyOnCompleteListener listener) {
         Map<String, Object> json = post.toJson();
         db.collection(Post.COLLECTION_NAME)
                 .document(post.getId())
@@ -60,7 +66,7 @@ public class Firebase {
                 .addOnFailureListener(e -> listener.onComplete());
     }
 
-    public void updatePost(Post post, Model.UpdatePostListener listener) {
+    public void updatePost(Post post, EmptyOnCompleteListener listener) {
         Map<String, Object> json = post.toJson();
         db.collection(Post.COLLECTION_NAME).document(post.id)
                 .set(json).addOnCompleteListener(task -> {
@@ -69,7 +75,7 @@ public class Firebase {
         });
     }
 
-    public void createUser(User user, Model.AddUserListener listener) {
+    public void createUser(User user, EmptyOnCompleteListener listener) {
         Map<String, Object> json = user.toJson();
         db.collection(User.COLLECTION_NAME)
                 .document(user.getUid())
@@ -88,22 +94,22 @@ public class Firebase {
         return currentUser != null;
     }
 
-    public void signIn(String email, String password, Model.UserAuthentication listener) {
+    public void signIn(String email, String password, FirebaseUserOnCompleteListener listener) {
         firebaseAuth.signInWithEmailAndPassword(email, password)
                 .addOnCompleteListener(task -> onAuthenticationComplete(task, listener));
     }
 
-    public void register(String email, String password, Model.UserAuthentication listener) {
+    public void register(String email, String password, FirebaseUserOnCompleteListener listener) {
         firebaseAuth.createUserWithEmailAndPassword(email, password)
                 .addOnCompleteListener(task -> onAuthenticationComplete(task, listener));
     }
 
-    public void signOut(Model.UserSignOut listener) {
+    public void signOut(EmptyOnCompleteListener listener) {
         firebaseAuth.signOut();
         listener.onComplete();
     }
 
-    private void onAuthenticationComplete(Task<AuthResult> task, Model.UserAuthentication listener) {
+    private void onAuthenticationComplete(Task<AuthResult> task, FirebaseUserOnCompleteListener listener) {
         FirebaseUser user;
         if (task.isSuccessful()) {
             Log.d("UserAuthentication", "signInWithEmail:success");
@@ -118,7 +124,7 @@ public class Firebase {
 
     FirebaseStorage storage = FirebaseStorage.getInstance();
 
-    public void uploadImage(Bitmap imageBitmap, String imageName, String storageLocation, Model.UploadImageListener listener) {
+    public void uploadImage(Bitmap imageBitmap, String imageName, String storageLocation, ImageOnCompleteListener listener) {
         StorageReference storageReference = storage.getReference();
         StorageReference imageReference = storageReference.child(storageLocation + imageName);
 
@@ -134,12 +140,12 @@ public class Firebase {
                 }));
     }
 
-    public void updateUser(User user, Model.UpdateUserListener listener) {
+    public void updateUser(User user, EmptyOnCompleteListener listener) {
         db.collection(User.COLLECTION_NAME).document(user.uid)
                 .set(user).addOnCompleteListener(task -> listener.onComplete());
     }
 
-    public void getUserByUid(String uid, Model.GetUserByUidListener listener) {
+    public void getUserByUid(String uid, UserOnCompleteListener listener) {
         db.collection(User.COLLECTION_NAME)
                 .document(uid)
                 .get()
@@ -153,7 +159,7 @@ public class Firebase {
                 });
     }
 
-    public void deletePost(String id, Model.DeletePostListener listener) {
+    public void deletePost(String id, EmptyOnCompleteListener listener) {
         db.collection(Post.COLLECTION_NAME)
                 .document(id).delete().addOnCompleteListener(task -> {
                     listener.onComplete();

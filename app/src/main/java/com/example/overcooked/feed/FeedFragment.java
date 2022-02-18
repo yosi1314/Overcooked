@@ -22,6 +22,7 @@ import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 import com.example.overcooked.R;
 import com.example.overcooked.model.Model;
 import com.example.overcooked.model.Post;
+import com.example.overcooked.model.enums.PostListLoadingState;
 import com.getbase.floatingactionbutton.FloatingActionButton;
 import com.getbase.floatingactionbutton.FloatingActionsMenu;
 import com.squareup.picasso.Picasso;
@@ -79,9 +80,9 @@ public class FeedFragment extends Fragment {
 
         viewModel.getPosts().observe(getViewLifecycleOwner(), postList -> refresh());
         //liveDataPosts.observe(getViewLifecycleOwner(), postList -> refresh());
-        swipeRefresh.setRefreshing(Model.instance.getPostListLoadingState().getValue() == Model.PostListLoadingState.loading);
+        swipeRefresh.setRefreshing(Model.instance.getPostListLoadingState().getValue() == PostListLoadingState.loading);
         Model.instance.getPostListLoadingState().observe(getViewLifecycleOwner(), postListLoadingState -> {
-            swipeRefresh.setRefreshing(postListLoadingState == Model.PostListLoadingState.loading);
+            swipeRefresh.setRefreshing(postListLoadingState == PostListLoadingState.loading);
         });
 
         feedMenuFab.bringToFront();
