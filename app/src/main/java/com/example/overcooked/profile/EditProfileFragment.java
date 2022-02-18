@@ -67,7 +67,7 @@ public class EditProfileFragment extends ImageHandlerFragment {
         if (img != null) {
             Picasso.get().load(img).into(profileImageImv);
         } else {
-            profileImageImv.setImageResource(R.drawable.main_logo);
+            profileImageImv.setImageResource(R.mipmap.ic_launcher_round);
         }
         displayNameEt.setText(user.getDisplayName());
         emailEt.setText(user.getEmail());
@@ -87,21 +87,21 @@ public class EditProfileFragment extends ImageHandlerFragment {
         boolean shouldSubmit = isShouldSubmit(displayName);
 
         if (shouldSubmit) {
-            progressBar.setVisibility(View.VISIBLE);
-            disableFAB(galleryBtn);
-            disableFAB(cameraBtn);
-            disableButton(saveBtn);
+            showProgressBar(progressBar);
+
             User newUser = new User(id, displayName, email);
             if (imageBitmap != null) {
                 Model.instance.uploadImage(imageBitmap, id + ".jpg", getString(R.string.storage_posts), url -> {
                     newUser.setImg(url);
                     Model.instance.updateUser(newUser, () -> {
+                        hideProgressBar(progressBar);
                         Navigation.findNavController(displayNameEt).navigateUp();
                     });
                 });
             } else {
                 newUser.setImg(user.getImg());
                 Model.instance.updateUser(newUser, () -> {
+                    hideProgressBar(progressBar);
                     Navigation.findNavController(displayNameEt).navigateUp();
                 });
             }
@@ -117,17 +117,5 @@ public class EditProfileFragment extends ImageHandlerFragment {
         }
 
         return shouldSubmit;
-    }
-
-    private void disableButton(Button button) {
-        button.setEnabled(false);
-        button.setClickable(false);
-        button.setAlpha(.5f);
-    }
-
-    private void disableFAB(FloatingActionButton button) {
-        button.setEnabled(false);
-        button.setClickable(false);
-        button.setAlpha(.5f);
     }
 }

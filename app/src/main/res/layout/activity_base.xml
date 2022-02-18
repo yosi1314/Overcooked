@@ -50,5 +50,4 @@
         app:layout_constraintTop_toTopOf="parent"
         app:menu="@menu/base_menu" />
 
-
 </androidx.drawerlayout.widget.DrawerLayout>

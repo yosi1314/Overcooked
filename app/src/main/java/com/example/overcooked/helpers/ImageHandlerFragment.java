@@ -12,7 +12,7 @@ import androidx.fragment.app.Fragment;
 
 import java.io.IOException;
 
-public class ImageHandlerFragment extends Fragment {
+public class ImageHandlerFragment extends UtilsFragment {
     private static final int REQUEST_CAMERA = 1;
     private static final int REQUEST_GALLERY = 2;
 

@@ -5,12 +5,13 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 
-import androidx.fragment.app.Fragment;
 import androidx.navigation.Navigation;
 
 import com.example.overcooked.R;
+import com.example.overcooked.helpers.UtilsFragment;
 import com.example.overcooked.model.Model;
 import com.example.overcooked.model.Post;
 import com.getbase.floatingactionbutton.FloatingActionButton;
@@ -22,15 +23,17 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
-public class PostFragment extends Fragment {
+public class PostFragment extends UtilsFragment {
 
     ImageView post_image_view;
+    ImageView contentSeparator;
     TextView post_title;
     TextView post_description;
     TextView post_author;
     TextView post_content;
     TextView postUploadDate;
     TextView separator;
+    ProgressBar progressBar;
     FloatingActionsMenu fabMenu;
     FloatingActionButton editFab;
     FloatingActionButton deleteFab;
@@ -55,6 +58,10 @@ public class PostFragment extends Fragment {
         fabMenu = view.findViewById(R.id.single_post_fab_menu);
         editFab = view.findViewById(R.id.single_post_edit_button);
         deleteFab = view.findViewById(R.id.single_post_delete_fab);
+        contentSeparator = view.findViewById(R.id.single_post_content_separator);
+
+        progressBar = view.findViewById(R.id.single_post_progress_bar);
+        showProgressBar(progressBar);
 
         fabMenu.setVisibility(View.GONE);
         fabMenu.setEnabled(false);
@@ -64,7 +71,7 @@ public class PostFragment extends Fragment {
 
         Model.instance.getPostById(postId, (result) -> {
             post = result;
-            setPostData();
+            setData();
             if(post.getAuthor().equals(Model.instance.getCurrentUserUID())){
                 fabMenu.setVisibility(View.VISIBLE);
                 fabMenu.setEnabled(true);
@@ -85,16 +92,18 @@ public class PostFragment extends Fragment {
         Navigation.findNavController(v).navigate(PostFragmentDirections.actionGlobalCreatePostFragment(post));
     }
 
-    private void setPostData() {
+    private void setPostValues(String displayName) {
         if(post.getImg() != null){
             Picasso.get().load(post.getImg()).into(post_image_view);
         } else {
             post_image_view.setImageResource(R.drawable.main_logo);
         }
-        getAuthorData();
+        contentSeparator.setImageResource(R.drawable.dotted_divider);
+        post_author.setText(displayName);
         post_title.setText(post.getTitle());
         try {
             postUploadDate.setText(getDate(post.getUploadDate()));
+            separator.setText("/");
         } catch (ParseException e) {
             postUploadDate.setVisibility(View.GONE);
             separator.setVisibility(View.GONE);
@@ -103,10 +112,10 @@ public class PostFragment extends Fragment {
         post_content.setText(post.getContent());
     }
 
-    private void getAuthorData(){
-        post_author.setText("Loading author...");
+    private void setData(){
         Model.instance.getUserById(post.getAuthor(), user -> {
-            post_author.setText(user.getDisplayName());
+            setPostValues(user.getDisplayName());
+            hideProgressBar(progressBar);
         });
     }
 

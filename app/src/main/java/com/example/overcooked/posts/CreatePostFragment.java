@@ -102,8 +102,8 @@ public class CreatePostFragment extends ImageHandlerFragment {
         boolean shouldSubmit = isShouldSubmit(title, description, content);
 
         if (shouldSubmit) {
-            progressBar.setVisibility(View.VISIBLE);
-            actionBtn.setEnabled(false);
+            showProgressBar(progressBar);
+
             Post newPost = new Post(id, title, description, author, content);
             if (imageBitmap != null) {
                 Model.instance.uploadImage(imageBitmap, id + ".jpg", getString(R.string.storage_posts), url -> {
@@ -141,10 +141,12 @@ public class CreatePostFragment extends ImageHandlerFragment {
     private void handleUserAction(Post newPost) {
         if (isPostCreation) {
             Model.instance.addPost(newPost, () -> {
+                hideProgressBar(progressBar);
                 Navigation.findNavController(titleEt).navigateUp();
             });
         } else {
             Model.instance.updatePost(newPost, () -> {
+                hideProgressBar(progressBar);
                 Navigation.findNavController(titleEt).navigateUp();
             });
         }

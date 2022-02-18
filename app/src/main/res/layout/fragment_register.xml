@@ -191,7 +191,7 @@
     </androidx.appcompat.widget.LinearLayoutCompat>
 
     <ProgressBar
-        android:id="@+id/create_post_progress_bar"
+        android:id="@+id/register_progress_bar"
         style="?android:attr/progressBarStyle"
         android:layout_width="160dp"
         android:layout_height="160dp"

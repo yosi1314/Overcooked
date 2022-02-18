@@ -15,8 +15,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.497"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:srcCompat="@drawable/main_logo" />
+        app:layout_constraintTop_toTopOf="parent" />
 
     <com.google.android.flexbox.FlexboxLayout
         android:id="@+id/flexboxLayout2"
@@ -97,11 +96,12 @@
                 android:id="@+id/edit_profile_email_et"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:alpha=".5"
                 android:enabled="false"
                 android:inputType="textEmailAddress"
                 android:maxLines="1"
                 android:textColor="#FFFFFF"
-                android:textCursorDrawable="@null"/>
+                android:textCursorDrawable="@null" />
 
         </com.google.android.material.textfield.TextInputLayout>
 

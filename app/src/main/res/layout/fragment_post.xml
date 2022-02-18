@@ -7,7 +7,15 @@
     android:background="#000000"
     android:padding="8sp"
     tools:context=".posts.PostFragment">
-    <ScrollView android:layout_height="match_parent" android:layout_width="match_parent">
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -22,7 +30,6 @@
                 android:paddingTop="8sp"
                 android:paddingRight="8sp"
                 android:paddingBottom="8sp"
-                android:text="TextView"
                 android:textColor="#FFFFFF"
                 android:textSize="48sp"
                 android:textStyle="bold" />
@@ -35,7 +42,6 @@
                 android:paddingTop="8sp"
                 android:paddingRight="8sp"
                 android:paddingBottom="8sp"
-                android:text="TextView"
                 android:textColor="#FFFFFF"
                 android:textSize="20sp"
                 android:textStyle="bold" />
@@ -51,7 +57,6 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:padding="8sp"
-                    android:text="TextView"
                     android:textColor="@color/OvercookedYellow"
                     android:textSize="14sp" />
 
@@ -60,7 +65,6 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:text="/"
                     android:textColor="@color/OvercookedYellow" />
 
                 <TextView
@@ -68,7 +72,6 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:padding="8sp"
-                    android:text="TextView"
                     android:textColor="@color/OvercookedYellow"
                     android:textSize="14sp" />
 
@@ -80,25 +83,22 @@
                 android:layout_height="200dp"
                 android:layout_marginTop="8dp"
                 android:scaleType="centerCrop"
-                android:src="@drawable/main_logo"
                 app:layout_constraintDimensionRatio="16:9"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
 
             <ImageView
-                android:id="@+id/imageView2"
+                android:id="@+id/single_post_content_separator"
                 android:layout_width="match_parent"
                 android:layout_height="2dp"
-                android:layout_marginTop="8sp"
-                android:src="@drawable/dotted_divider" />
+                android:layout_marginTop="8sp" />
 
             <TextView
                 android:id="@+id/single_post_content_tv"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:padding="8sp"
-                android:text="TextView"
                 android:textColor="#FFFFFF"
                 android:textSize="18sp" />
         </LinearLayout>
@@ -140,5 +140,16 @@
             app:fab_title="Delete post"/>
 
     </com.getbase.floatingactionbutton.FloatingActionsMenu>
+
+    <ProgressBar
+        android:id="@+id/single_post_progress_bar"
+        style="?android:attr/progressBarStyle"
+        android:layout_width="160dp"
+        android:layout_height="160dp"
+        android:indeterminateTint="@color/OvercookedYellow"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

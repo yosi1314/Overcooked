@@ -7,17 +7,19 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ProgressBar;
 
-import androidx.fragment.app.Fragment;
 import androidx.navigation.Navigation;
 
 import com.example.overcooked.R;
 import com.example.overcooked.feed.BaseActivity;
+import com.example.overcooked.helpers.UtilsFragment;
 import com.example.overcooked.model.Model;
 
-public class LoginFragment extends Fragment {
+public class LoginFragment extends UtilsFragment {
     EditText emailEt;
     EditText passwordEt;
+    ProgressBar progressBar;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -29,6 +31,8 @@ public class LoginFragment extends Fragment {
         passwordEt = view.findViewById(R.id.login_password_et);
         Button loginBtn = view.findViewById(R.id.login_login_btn);
         Button goToSignUp = view.findViewById(R.id.login_signup_btn);
+        progressBar = view.findViewById(R.id.login_progress_bar);
+        progressBar.setVisibility(View.GONE);
 
         goToSignUp.setOnClickListener(v -> {
             Navigation.findNavController(v).navigate(LoginFragmentDirections.actionLoginFragmentToRegisterFragment());
@@ -41,6 +45,8 @@ public class LoginFragment extends Fragment {
             boolean shouldSubmit = isShouldSubmit(email, password);
 
             if(shouldSubmit) {
+                showProgressBar(progressBar);
+
                 Model.instance.signIn(email, password, user -> {
                     if(user != null) {
                         toFeedActivity();
@@ -62,10 +68,6 @@ public class LoginFragment extends Fragment {
 
     private boolean isShouldSubmit(String email, String password) {
         boolean shouldSubmit = true;
-        if (!android.util.Patterns.EMAIL_ADDRESS.matcher(email).matches()) {
-            emailEt.setError("Invalid email");
-            shouldSubmit = false;
-        }
 
         if (email.isEmpty()) {
             emailEt.setError("Please fill in your email address");

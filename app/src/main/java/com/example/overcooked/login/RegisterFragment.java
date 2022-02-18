@@ -9,6 +9,7 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
 
 import androidx.annotation.Nullable;
 import androidx.navigation.Navigation;
@@ -28,7 +29,7 @@ public class RegisterFragment extends ImageHandlerFragment {
     EditText confirmPasswordEt;
     Button registerButton;
     Button goToSignIn;
-
+    ProgressBar progressBar;
     FloatingActionButton galleryBtn;
     FloatingActionButton cameraBtn;
     ImageView userImageImv;
@@ -48,6 +49,9 @@ public class RegisterFragment extends ImageHandlerFragment {
         confirmPasswordEt = view.findViewById(R.id.register_confirm_password_et);
         registerButton = view.findViewById(R.id.register_signup_btn);
         goToSignIn = view.findViewById(R.id.register_signin_btn);
+
+        progressBar = view.findViewById(R.id.register_progress_bar);
+        progressBar.setVisibility(View.GONE);
 
         galleryBtn = view.findViewById(R.id.register_gallery_button);
         cameraBtn = view.findViewById(R.id.register_camera_button);
@@ -87,6 +91,7 @@ public class RegisterFragment extends ImageHandlerFragment {
         }
 
         if (shouldSubmit) {
+            showProgressBar(progressBar);
             Model.instance.signUp(email, password, user -> {
                 if (user != null) {
                     String uid = user.getUid();
@@ -104,7 +109,8 @@ public class RegisterFragment extends ImageHandlerFragment {
                         });
                     }
                 } else {
-                    //TODO: display error label to client
+                    //TODO: show errors from firebase
+                    hideProgressBar(progressBar);
                 }
             });
         }
