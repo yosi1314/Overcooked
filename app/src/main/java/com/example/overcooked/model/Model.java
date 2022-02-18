@@ -31,6 +31,10 @@ public class Model {
         loaded
     }
 
+
+
+    
+
     MutableLiveData<PostListLoadingState> postListLoadingState = new MutableLiveData<PostListLoadingState>();
 
     public MutableLiveData<PostListLoadingState> getPostListLoadingState() {
