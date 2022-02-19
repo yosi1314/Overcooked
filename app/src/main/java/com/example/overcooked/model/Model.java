@@ -26,7 +26,10 @@ public class Model {
     public static Model instance = new Model();
     public Executor executor = Executors.newFixedThreadPool(1);
     public Handler mainThread = HandlerCompat.createAsync(Looper.getMainLooper());
+
     public Firebase firebase = new Firebase();
+    public Authentication authentication = new Authentication();
+    public Storage storage = new Storage();
 
     MutableLiveData<List<Post>> posts = new MutableLiveData<>();
     MutableLiveData<PostListLoadingState> postListLoadingState = new MutableLiveData<>();
@@ -40,11 +43,23 @@ public class Model {
     }
 
     public String getCurrentUserUID() {
-        return firebase.getCurrentUserUID();
+        return authentication.getCurrentUserUID();
     }
 
     public boolean isSignedIn() {
-        return firebase.isUserSignedIn();
+        return authentication.isUserSignedIn();
+    }
+
+    public void signIn(String email, String password, FirebaseUserOnCompleteListener listener) {
+        authentication.signIn(email, password, listener);
+    }
+
+    public void signUp(String email, String password, FirebaseUserOnCompleteListener listener) {
+        authentication.register(email, password, listener);
+    }
+
+    public void signOut(EmptyOnCompleteListener listener) {
+        authentication.signOut(listener);
     }
 
     public void createUser(User user, EmptyOnCompleteListener listener) {
@@ -55,18 +70,6 @@ public class Model {
 
     public void updateUser(User user, EmptyOnCompleteListener listener) {
         firebase.updateUser(user, listener);
-    }
-
-    public void signIn(String email, String password, FirebaseUserOnCompleteListener listener) {
-        firebase.signIn(email, password, listener);
-    }
-
-    public void signUp(String email, String password, FirebaseUserOnCompleteListener listener) {
-        firebase.register(email, password, listener);
-    }
-
-    public void signOut(EmptyOnCompleteListener listener) {
-        firebase.signOut(listener);
     }
 
     public void getUserById(String uid, UserOnCompleteListener listener) {
@@ -93,27 +96,24 @@ public class Model {
         });
 
         firebase.getPosts(lastUpdateDate, fbPosts -> {
-            executor.execute(new Runnable() {
-                @Override
-                public void run() {
-                    Long localLastUpdate = new Long(0);
-                    Log.d("TAG", "fb returned " + fbPosts.size());
-                    for (Post post : fbPosts) {
-                        LocalDb.db.postDao().insertAll(post);
-                        if (localLastUpdate < post.getUpdateDate()) {
-                            localLastUpdate = post.getUpdateDate();
-                        }
+            executor.execute(() -> {
+                Long localLastUpdate = new Long(0);
+                Log.d("TAG", "fb returned " + fbPosts.size());
+                for (Post post : fbPosts) {
+                    LocalDb.db.postDao().insertAll(post);
+                    if (localLastUpdate < post.getUpdateDate()) {
+                        localLastUpdate = post.getUpdateDate();
                     }
-                    MyApplication.getContext()
-                            .getSharedPreferences("refreshPostsList", Context.MODE_PRIVATE)
-                            .edit()
-                            .putLong("PostsLastUpdate", localLastUpdate)
-                            .commit();
-
-                    List<Post> list = LocalDb.db.postDao().getAll();
-                    posts.postValue(list);
-                    postListLoadingState.postValue(PostListLoadingState.loaded);
                 }
+                MyApplication.getContext()
+                        .getSharedPreferences("refreshPostsList", Context.MODE_PRIVATE)
+                        .edit()
+                        .putLong("PostsLastUpdate", localLastUpdate)
+                        .commit();
+
+                List<Post> list = LocalDb.db.postDao().getAll();
+                posts.postValue(list);
+                postListLoadingState.postValue(PostListLoadingState.loaded);
             });
         });
     }
@@ -167,6 +167,6 @@ public class Model {
     }
 
     public void uploadImage(Bitmap imageBitmap, String imageName, String storageLocation, ImageOnCompleteListener listener) {
-        firebase.uploadImage(imageBitmap, imageName, storageLocation, listener);
+        storage.uploadImage(imageBitmap, imageName, storageLocation, listener);
     }
 }

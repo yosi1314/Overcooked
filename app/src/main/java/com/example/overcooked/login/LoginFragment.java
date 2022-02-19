@@ -8,15 +8,19 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ProgressBar;
+import android.widget.Toast;
 
+import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.navigation.Navigation;
 
 import com.example.overcooked.R;
 import com.example.overcooked.feed.BaseActivity;
 import com.example.overcooked.helpers.UtilsFragment;
 import com.example.overcooked.model.Model;
+import com.google.android.material.snackbar.Snackbar;
 
 public class LoginFragment extends UtilsFragment {
+    ConstraintLayout loginCl;
     EditText emailEt;
     EditText passwordEt;
     ProgressBar progressBar;
@@ -27,6 +31,7 @@ public class LoginFragment extends UtilsFragment {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_login, container, false);
 
+        loginCl = view.findViewById(R.id.login_cl);
         emailEt = view.findViewById(R.id.login_email_et);
         passwordEt = view.findViewById(R.id.login_password_et);
         Button loginBtn = view.findViewById(R.id.login_login_btn);
@@ -47,11 +52,13 @@ public class LoginFragment extends UtilsFragment {
             if(shouldSubmit) {
                 showProgressBar(progressBar);
 
-                Model.instance.signIn(email, password, user -> {
+                Model.instance.signIn(email, password, (user, ex) -> {
                     if(user != null) {
                         toFeedActivity();
                     } else {
-                        //TODO: display error label to client
+                        hideProgressBar(progressBar);
+                        Snackbar.make(loginCl, ex.getMessage(), Snackbar.LENGTH_LONG)
+                                .show();
                     }
                 });
             }

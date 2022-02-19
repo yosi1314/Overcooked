@@ -10,8 +10,10 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
+import android.widget.Toast;
 
 import androidx.annotation.Nullable;
+import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.navigation.Navigation;
 
 import com.example.overcooked.R;
@@ -20,9 +22,11 @@ import com.example.overcooked.helpers.IntentHelper;
 import com.example.overcooked.model.Model;
 import com.example.overcooked.model.User;
 import com.getbase.floatingactionbutton.FloatingActionButton;
+import com.google.android.material.snackbar.Snackbar;
 
 public class RegisterFragment extends ImageHandlerFragment {
 
+    ConstraintLayout registerCl;
     EditText displayNameEt;
     EditText emailEt;
     EditText passwordEt;
@@ -43,6 +47,7 @@ public class RegisterFragment extends ImageHandlerFragment {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_register, container, false);
 
+        registerCl = view.findViewById(R.id.register_cl);
         displayNameEt = view.findViewById(R.id.register_display_name_et);
         emailEt = view.findViewById(R.id.register_email_et);
         passwordEt = view.findViewById(R.id.register_password_et);
@@ -77,7 +82,7 @@ public class RegisterFragment extends ImageHandlerFragment {
 
         if (shouldSubmit) {
             showProgressBar(progressBar);
-            Model.instance.signUp(email, password, user -> {
+            Model.instance.signUp(email, password, (user, ex) -> {
                 if (user != null) {
                     String uid = user.getUid();
                     User userToAdd = new User(uid, displayName, email);
@@ -94,8 +99,9 @@ public class RegisterFragment extends ImageHandlerFragment {
                         });
                     }
                 } else {
-                    //TODO: show errors from firebase
                     hideProgressBar(progressBar);
+                    Snackbar.make(registerCl, ex.getMessage(), Snackbar.LENGTH_LONG)
+                            .show();
                 }
             });
         }
@@ -110,12 +116,12 @@ public class RegisterFragment extends ImageHandlerFragment {
         }
 
         if (email.isEmpty()) {
-            displayNameEt.setError("Email cannot be empty");
+            emailEt.setError("Email cannot be empty");
             shouldSubmit = false;
         }
 
         if (!android.util.Patterns.EMAIL_ADDRESS.matcher(email).matches()) {
-            displayNameEt.setError("Invalid email");
+            emailEt.setError("Invalid email");
             shouldSubmit = false;
         }
 

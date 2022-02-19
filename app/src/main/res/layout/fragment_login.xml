@@ -2,6 +2,7 @@
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/login_cl"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="#000000"
@@ -32,43 +33,43 @@
         app:layout_constraintTop_toBottomOf="@+id/login_logo_imv">
 
         <com.google.android.material.textfield.TextInputLayout
+            style="@style/Overcooked.TextInputLayoutStyle"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_margin="4dp"
             android:hint="@string/email"
             android:paddingTop="8dp"
-            app:hintTextColor="@color/white"
             android:textColorHint="@color/white"
-            style="@style/Overcooked.TextInputLayoutStyle">
+            app:hintTextColor="@color/white">
 
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/login_email_et"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:inputType="textEmailAddress"
-                android:textCursorDrawable="@null"
+                android:maxLines="1"
                 android:textColor="#FFFFFF"
-                android:maxLines="1" />
+                android:textCursorDrawable="@null" />
         </com.google.android.material.textfield.TextInputLayout>
 
         <com.google.android.material.textfield.TextInputLayout
+            style="@style/Overcooked.TextInputLayoutStyle"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_margin="4dp"
             android:hint="@string/password"
             android:paddingTop="8dp"
-            app:hintTextColor="@color/white"
             android:textColorHint="@color/white"
-            style="@style/Overcooked.TextInputLayoutStyle">
+            app:hintTextColor="@color/white">
 
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/login_password_et"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:inputType="textPassword"
-                android:textCursorDrawable="@null"
+                android:maxLines="1"
                 android:textColor="#FFFFFF"
-                android:maxLines="1" />
+                android:textCursorDrawable="@null" />
         </com.google.android.material.textfield.TextInputLayout>
 
         <com.google.android.material.button.MaterialButton

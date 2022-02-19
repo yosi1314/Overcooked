@@ -29,7 +29,6 @@ import java.util.List;
 import java.util.Map;
 
 public class Firebase {
-    private final FirebaseAuth firebaseAuth = FirebaseAuth.getInstance();
     FirebaseFirestore db = FirebaseFirestore.getInstance();
 
     public Firebase() {
@@ -84,61 +83,6 @@ public class Firebase {
                 .addOnFailureListener(e -> listener.onComplete());
     }
 
-    public String getCurrentUserUID() {
-        return firebaseAuth.getUid();
-    }
-
-    public boolean isUserSignedIn() {
-        FirebaseUser currentUser = firebaseAuth.getCurrentUser();
-
-        return currentUser != null;
-    }
-
-    public void signIn(String email, String password, FirebaseUserOnCompleteListener listener) {
-        firebaseAuth.signInWithEmailAndPassword(email, password)
-                .addOnCompleteListener(task -> onAuthenticationComplete(task, listener));
-    }
-
-    public void register(String email, String password, FirebaseUserOnCompleteListener listener) {
-        firebaseAuth.createUserWithEmailAndPassword(email, password)
-                .addOnCompleteListener(task -> onAuthenticationComplete(task, listener));
-    }
-
-    public void signOut(EmptyOnCompleteListener listener) {
-        firebaseAuth.signOut();
-        listener.onComplete();
-    }
-
-    private void onAuthenticationComplete(Task<AuthResult> task, FirebaseUserOnCompleteListener listener) {
-        FirebaseUser user;
-        if (task.isSuccessful()) {
-            Log.d("UserAuthentication", "signInWithEmail:success");
-            user = firebaseAuth.getCurrentUser();
-        } else {
-            Log.w("UserAuthentication", "signInWithEmail:failure", task.getException());
-            user = null;
-        }
-
-        listener.onComplete(user);
-    }
-
-    FirebaseStorage storage = FirebaseStorage.getInstance();
-
-    public void uploadImage(Bitmap imageBitmap, String imageName, String storageLocation, ImageOnCompleteListener listener) {
-        StorageReference storageReference = storage.getReference();
-        StorageReference imageReference = storageReference.child(storageLocation + imageName);
-
-        ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
-        imageBitmap.compress(Bitmap.CompressFormat.JPEG, 100, outputStream);
-        byte[] data = outputStream.toByteArray();
-
-        UploadTask uploadTask = imageReference.putBytes(data);
-        uploadTask.addOnFailureListener(exception -> listener.onComplete(null))
-                .addOnCompleteListener(task -> imageReference.getDownloadUrl().addOnSuccessListener(uri -> {
-                    Uri downloadUrl = uri;
-                    listener.onComplete(downloadUrl.toString());
-                }));
-    }
 
     public void updateUser(User user, EmptyOnCompleteListener listener) {
         db.collection(User.COLLECTION_NAME).document(user.uid)
