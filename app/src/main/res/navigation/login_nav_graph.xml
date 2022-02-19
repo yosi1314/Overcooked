@@ -8,7 +8,6 @@
     <fragment
         android:id="@+id/loginFragment"
         android:name="com.example.overcooked.login.LoginFragment"
-        android:label="Overcooked"
         tools:layout="@layout/fragment_login" >
         <action
             android:id="@+id/action_loginFragment_to_registerFragment"
@@ -17,6 +16,5 @@
     <fragment
         android:id="@+id/registerFragment"
         android:name="com.example.overcooked.login.RegisterFragment"
-        android:label="Overcooked"
         tools:layout="@layout/fragment_register" />
 </navigation>

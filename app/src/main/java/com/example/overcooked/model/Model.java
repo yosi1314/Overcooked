@@ -11,7 +11,7 @@ import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 
 import com.example.overcooked.MyApplication;
-import com.example.overcooked.model.enums.PostListLoadingState;
+import com.example.overcooked.model.enums.FirebaseDataLoadingState;
 import com.example.overcooked.model.interfaces.EmptyOnCompleteListener;
 import com.example.overcooked.model.interfaces.FirebaseUserOnCompleteListener;
 import com.example.overcooked.model.interfaces.ImageOnCompleteListener;
@@ -32,14 +32,21 @@ public class Model {
     public Storage storage = new Storage();
 
     MutableLiveData<List<Post>> posts = new MutableLiveData<>();
-    MutableLiveData<PostListLoadingState> postListLoadingState = new MutableLiveData<>();
+    MutableLiveData<FirebaseDataLoadingState> postListLoadingState = new MutableLiveData<>();
 
-    public MutableLiveData<PostListLoadingState> getPostListLoadingState() {
+    MutableLiveData<List<User>> users = new MutableLiveData<>();
+    MutableLiveData<FirebaseDataLoadingState> usersLoadingState = new MutableLiveData<>();
+
+    public MutableLiveData<FirebaseDataLoadingState> getPostListLoadingState() {
         return postListLoadingState;
     }
 
+    public MutableLiveData<FirebaseDataLoadingState> getUsersLoadingState() {
+        return usersLoadingState;
+    }
+
     private Model() {
-        postListLoadingState.setValue(PostListLoadingState.loaded);
+        postListLoadingState.setValue(FirebaseDataLoadingState.loaded);
     }
 
     public String getCurrentUserUID() {
@@ -65,26 +72,84 @@ public class Model {
     public void createUser(User user, EmptyOnCompleteListener listener) {
         firebase.createUser(user, () -> {
             listener.onComplete();
+            refreshUsersList();
         });
     }
 
     public void updateUser(User user, EmptyOnCompleteListener listener) {
-        firebase.updateUser(user, listener);
+        firebase.updateUser(user, () -> updateLocalUser(user, listener));
+    }
+
+    public void updateLocalUser(User user, EmptyOnCompleteListener listener){
+        executor.execute(() -> {
+            LocalDb.db.userDao().updateUser(user);
+            mainThread.post(() -> {
+                listener.onComplete();
+                refreshUsersList();
+            });
+        });
     }
 
     public void getUserById(String uid, UserOnCompleteListener listener) {
-        firebase.getUserByUid(uid, listener);
+        executor.execute(() -> {
+            User user = LocalDb.db.userDao().getUserById(uid);
+            mainThread.post(() -> {
+                listener.onComplete(user);
+            });
+        });
     }
 
-    public LiveData<List<Post>> getAll() {
+    public LiveData<List<Post>> getAllPosts() {
         if (posts.getValue() == null) {
             refreshPostsList();
         }
         return posts;
     }
 
+    public LiveData<List<User>> getUsers(){
+        if(users.getValue() == null){
+            refreshUsersList();
+        }
+        return users;
+    }
+
+    public void refreshUsersList() {
+        usersLoadingState.setValue(FirebaseDataLoadingState.loading);
+
+        Long lastUpdateDate = MyApplication.getContext()
+                .getSharedPreferences("refreshUsersList", Context.MODE_PRIVATE)
+                .getLong("UsersLastUpdate", 0);
+
+        executor.execute(() -> {
+            List<User> usersList = LocalDb.db.userDao().getAll();
+            users.postValue(usersList);
+        });
+
+        firebase.getUsers(lastUpdateDate, fbUsers -> {
+            executor.execute(() -> {
+                Long localLastUpdate = new Long(0);
+                Log.d("TAG", "fb returned " + fbUsers.size());
+                for (User user : fbUsers) {
+                    LocalDb.db.userDao().insertAll(user);
+                    if (localLastUpdate < user.getUpdateDate()) {
+                        localLastUpdate = user.getUpdateDate();
+                    }
+                }
+                MyApplication.getContext()
+                        .getSharedPreferences("refreshUsersList", Context.MODE_PRIVATE)
+                        .edit()
+                        .putLong("UsersLastUpdate", localLastUpdate)
+                        .commit();
+
+                List<User> list = LocalDb.db.userDao().getAll();
+                users.postValue(list);
+                usersLoadingState.postValue(FirebaseDataLoadingState.loaded);
+            });
+        });
+    }
+
     public void refreshPostsList() {
-        postListLoadingState.setValue(PostListLoadingState.loading);
+        postListLoadingState.setValue(FirebaseDataLoadingState.loading);
 
         Long lastUpdateDate = MyApplication.getContext()
                 .getSharedPreferences("refreshPostsList", Context.MODE_PRIVATE)
@@ -113,7 +178,7 @@ public class Model {
 
                 List<Post> list = LocalDb.db.postDao().getAll();
                 posts.postValue(list);
-                postListLoadingState.postValue(PostListLoadingState.loaded);
+                postListLoadingState.postValue(FirebaseDataLoadingState.loaded);
             });
         });
     }

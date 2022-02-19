@@ -6,7 +6,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
-import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -22,7 +21,7 @@ import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 import com.example.overcooked.R;
 import com.example.overcooked.model.Model;
 import com.example.overcooked.model.Post;
-import com.example.overcooked.model.enums.PostListLoadingState;
+import com.example.overcooked.model.enums.FirebaseDataLoadingState;
 import com.getbase.floatingactionbutton.FloatingActionButton;
 import com.getbase.floatingactionbutton.FloatingActionsMenu;
 import com.squareup.picasso.Picasso;
@@ -57,7 +56,6 @@ public class FeedFragment extends Fragment {
         swipeRefresh = view.findViewById(R.id.feed_swiperefresh);
         swipeRefresh.setOnRefreshListener(() -> Model.instance.refreshPostsList());
 
-
         FloatingActionButton addButton = view.findViewById(R.id.feed_add_post_button);
         FloatingActionsMenu feedMenuFab = view.findViewById(R.id.feed_fab_menu);
 
@@ -72,17 +70,15 @@ public class FeedFragment extends Fragment {
         postAdapter.setOnItemClickListener((v, position) -> {
             LiveData<List<Post>> data = isGlobalFeed ? viewModel.getPosts() : viewModel.getMyPosts(userUid);
             String postId = data.getValue().get(position).getId();
-            //String postId = liveDataPosts.getValue().get(position).getId();
             Navigation.findNavController(v).navigate(FeedFragmentDirections.actionFeedFragmentToPostFragment(postId));
         });
 
         setHasOptionsMenu(true);
 
         viewModel.getPosts().observe(getViewLifecycleOwner(), postList -> refresh());
-        //liveDataPosts.observe(getViewLifecycleOwner(), postList -> refresh());
-        swipeRefresh.setRefreshing(Model.instance.getPostListLoadingState().getValue() == PostListLoadingState.loading);
+        swipeRefresh.setRefreshing(Model.instance.getPostListLoadingState().getValue() == FirebaseDataLoadingState.loading);
         Model.instance.getPostListLoadingState().observe(getViewLifecycleOwner(), postListLoadingState -> {
-            swipeRefresh.setRefreshing(postListLoadingState == PostListLoadingState.loading);
+            swipeRefresh.setRefreshing(postListLoadingState == FirebaseDataLoadingState.loading);
         });
 
         feedMenuFab.bringToFront();
@@ -154,7 +150,6 @@ public class FeedFragment extends Fragment {
 
         @Override
         public void onBindViewHolder(@NonNull PostViewHolder holder, int position) {
-//            Post post = viewModel.getPosts().getValue().get(position);
             LiveData<List<Post>> data = isGlobalFeed ? viewModel.getPosts() : viewModel.getMyPosts(userUid);
             Post post = data.getValue().get(position);
             holder.bind(post);
@@ -162,7 +157,6 @@ public class FeedFragment extends Fragment {
 
         @Override
         public int getItemCount() {
-//            List<Post> data = viewModel.getPosts().getValue();
             LiveData<List<Post>> viewPosts = isGlobalFeed ? viewModel.getPosts() : viewModel.getMyPosts(userUid);
             List<Post> data = viewPosts.getValue();
             if (data == null) {

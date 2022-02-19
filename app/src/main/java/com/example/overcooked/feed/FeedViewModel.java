@@ -14,7 +14,7 @@ public class FeedViewModel extends ViewModel {
     LiveData<List<Post>> posts;
 
     public FeedViewModel(){
-        posts = Model.instance.getAll();
+        posts = Model.instance.getAllPosts();
     }
 
     public LiveData<List<Post>> getPosts() { return posts; }

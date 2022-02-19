@@ -88,7 +88,6 @@
             android:layout_height="wrap_content"
             android:layout_margin="4dp"
             android:hint="@string/display_name"
-            android:paddingTop="8dp"
             android:textColorHint="@color/white"
             app:hintTextColor="@color/white">
 
@@ -108,7 +107,6 @@
             android:layout_height="wrap_content"
             android:layout_margin="4dp"
             android:hint="@string/email"
-            android:paddingTop="8dp"
             android:textColorHint="@color/white"
             app:hintTextColor="@color/white">
 
@@ -128,7 +126,6 @@
             android:layout_height="wrap_content"
             android:layout_margin="4dp"
             android:hint="@string/password"
-            android:paddingTop="8dp"
             android:textColorHint="@color/white"
             app:hintTextColor="@color/white">
 
@@ -148,7 +145,6 @@
             android:layout_height="wrap_content"
             android:layout_margin="4dp"
             android:hint="@string/confirm_password"
-            android:paddingTop="8dp"
             android:textColorHint="@color/white"
             app:hintTextColor="@color/white">
 
@@ -182,7 +178,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:linksClickable="true"
-                android:text="@string/welcome_back_sign_in"
+                android:text="@string/already_a_member_sign_in"
                 android:textAlignment="center"
                 android:textAllCaps="false"
                 android:textColor="@color/white"

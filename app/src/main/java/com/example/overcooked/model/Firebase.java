@@ -9,6 +9,7 @@ import com.example.overcooked.model.interfaces.FirebaseUserOnCompleteListener;
 import com.example.overcooked.model.interfaces.ImageOnCompleteListener;
 import com.example.overcooked.model.interfaces.PostsOnCompleteListener;
 import com.example.overcooked.model.interfaces.UserOnCompleteListener;
+import com.example.overcooked.model.interfaces.UsersOnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.Timestamp;
 import com.google.firebase.auth.AuthResult;
@@ -18,6 +19,7 @@ import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.FirebaseFirestoreSettings;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
+import com.google.firebase.firestore.QuerySnapshot;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
@@ -74,6 +76,24 @@ public class Firebase {
         });
     }
 
+    public void getUsers(Long lastUpdateDate, UsersOnCompleteListener listener) {
+        db.collection(User.COLLECTION_NAME)
+                .whereGreaterThanOrEqualTo("updateDate", new Timestamp(lastUpdateDate, 0))
+                .get()
+                .addOnCompleteListener(task -> {
+                    List<User> list = new LinkedList<>();
+                    if (task.isSuccessful()) {
+                        for (QueryDocumentSnapshot doc : task.getResult()) {
+                            User user = User.create(doc.getData());
+                            if (user != null) {
+                                list.add(user);
+                            }
+                        }
+                    }
+                    listener.onComplete(list);
+                });
+    }
+
     public void createUser(User user, EmptyOnCompleteListener listener) {
         Map<String, Object> json = user.toJson();
         db.collection(User.COLLECTION_NAME)
@@ -89,15 +109,17 @@ public class Firebase {
                 .set(user).addOnCompleteListener(task -> listener.onComplete());
     }
 
-    public void getUserByUid(String uid, UserOnCompleteListener listener) {
+    public void getUserByUid(String uid, Long lastUpdateDate, UserOnCompleteListener listener) {
         db.collection(User.COLLECTION_NAME)
-                .document(uid)
+                .whereGreaterThanOrEqualTo("updateDate", new Timestamp(lastUpdateDate, 0))
+                .whereEqualTo("uid", uid)
                 .get()
                 .addOnCompleteListener(task -> {
                     User user = null;
-                    DocumentSnapshot data = task.getResult();
-                    if (task.isSuccessful() & data != null) {
-                        user = User.create(data.getData());
+                    if (task.isSuccessful()) {
+                        for (QueryDocumentSnapshot doc : task.getResult()) {
+                            user = User.create(doc.getData());
+                        }
                     }
                     listener.onComplete(user);
                 });

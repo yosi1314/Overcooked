@@ -2,6 +2,7 @@ package com.example.overcooked.profile;
 
 import android.os.Bundle;
 
+import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 import androidx.navigation.Navigation;
 
@@ -32,6 +33,9 @@ public class ProfileFragment extends UtilsFragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_profile, container, false);
+
+        ((AppCompatActivity) getActivity()).getSupportActionBar().setTitle("My Profile");
+
         TextView displayNameTv = view.findViewById(R.id.profile_display_name_tv);
         TextView emailTv = view.findViewById(R.id.profile_email_tv);
         displayNameTitleTv = view.findViewById(R.id.profile_display_name_title_tv);
@@ -45,11 +49,7 @@ public class ProfileFragment extends UtilsFragment {
         hideInitialData();
         showProgressBar(progressBar);
 
-//        if (user == null) {
-//            editButton.setEnabled(false);
-//        }
-
-        Model.instance.getUserById(Model.instance.getCurrentUserUID(), (user) -> {
+        Model.instance.getUserById(Model.instance.getCurrentUserUID(), user -> {
             this.user = user;
             hideProgressBar(progressBar);
             showInitialData();

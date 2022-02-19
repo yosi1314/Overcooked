@@ -12,6 +12,7 @@ import android.widget.ImageView;
 import android.widget.ProgressBar;
 
 import androidx.annotation.Nullable;
+import androidx.appcompat.app.AppCompatActivity;
 import androidx.navigation.Navigation;
 
 import com.example.overcooked.R;
@@ -38,6 +39,7 @@ public class EditProfileFragment extends ImageHandlerFragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_edit_profile, container, false);
+        ((AppCompatActivity) getActivity()).getSupportActionBar().setTitle("Edit Profile");
 
         user = EditProfileFragmentArgs.fromBundle(getArguments()).getUser();
 

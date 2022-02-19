@@ -1,6 +1,6 @@
 package com.example.overcooked.model.enums;
 
-public enum PostListLoadingState {
+public enum FirebaseDataLoadingState {
     loading,
     loaded
 }

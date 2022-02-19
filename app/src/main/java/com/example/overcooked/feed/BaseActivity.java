@@ -8,6 +8,7 @@ import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
+import androidx.lifecycle.ViewModelProvider;
 import androidx.navigation.NavController;
 import androidx.navigation.NavDirections;
 import androidx.navigation.NavHost;
@@ -38,6 +39,7 @@ import com.squareup.picasso.Picasso;
 
 
 public class BaseActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
+    BaseActivityViewModel viewModel;
     NavController navCtl;
     DrawerLayout drawerLayout;
     NavHost navHost;
@@ -52,7 +54,8 @@ public class BaseActivity extends AppCompatActivity implements NavigationView.On
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_base);
-        getUser();
+
+        viewModel = new ViewModelProvider(this).get(BaseActivityViewModel.class);
 
         navHost = (NavHost) getSupportFragmentManager().findFragmentById(R.id.base_navhost);
         navCtl = navHost.getNavController();
@@ -70,6 +73,7 @@ public class BaseActivity extends AppCompatActivity implements NavigationView.On
             public void onDrawerOpened(View drawerView) {
                 super.onDrawerOpened(drawerView);
 
+                initUser();
                 profileImgImv = findViewById(R.id.menu_img_imv);
                 displayNameTv = findViewById(R.id.menu_display_name_tv);
                 emailTv = findViewById(R.id.menu_email_tv);
@@ -94,13 +98,13 @@ public class BaseActivity extends AppCompatActivity implements NavigationView.On
         toggle.syncState();
     }
 
-    private void getUser() {
-        Model.instance.getUserById(Model.instance.getCurrentUserUID(), (user) -> {
-            this.user = user;
-        });
+    private void initUser() {
+        user = viewModel.getUserById(Model.instance.getCurrentUserUID()).getValue();
     }
 
     private void setUserDetails() {
+        if (user == null) return;
+
         displayNameTv.setText(user.getDisplayName());
         emailTv.setText(user.getEmail());
         if(user.getImg() != null){
