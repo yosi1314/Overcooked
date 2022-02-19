@@ -54,7 +54,10 @@ public class FeedFragment extends Fragment {
         setRelevantFragmentData();
 
         swipeRefresh = view.findViewById(R.id.feed_swiperefresh);
-        swipeRefresh.setOnRefreshListener(() -> Model.instance.refreshPostsList());
+        swipeRefresh.setOnRefreshListener(() -> {
+            Model.instance.refreshPostsList();
+            Model.instance.refreshUsersList();
+        });
 
         FloatingActionButton addButton = view.findViewById(R.id.feed_add_post_button);
         FloatingActionsMenu feedMenuFab = view.findViewById(R.id.feed_fab_menu);
@@ -77,9 +80,7 @@ public class FeedFragment extends Fragment {
 
         viewModel.getPosts().observe(getViewLifecycleOwner(), postList -> refresh());
         swipeRefresh.setRefreshing(Model.instance.getPostListLoadingState().getValue() == FirebaseDataLoadingState.loading);
-        Model.instance.getPostListLoadingState().observe(getViewLifecycleOwner(), postListLoadingState -> {
-            swipeRefresh.setRefreshing(postListLoadingState == FirebaseDataLoadingState.loading);
-        });
+        Model.instance.getPostListLoadingState().observe(getViewLifecycleOwner(), postListLoadingState -> swipeRefresh.setRefreshing(postListLoadingState == FirebaseDataLoadingState.loading));
 
         feedMenuFab.bringToFront();
         addButton.setOnClickListener(v -> {
@@ -99,7 +100,7 @@ public class FeedFragment extends Fragment {
         postAdapter.notifyDataSetChanged();
     }
 
-    class PostViewHolder extends RecyclerView.ViewHolder {
+    static class PostViewHolder extends RecyclerView.ViewHolder {
         TextView titleTv;
         TextView descriptionTv;
         ImageView thumbnailImv;
@@ -144,8 +145,7 @@ public class FeedFragment extends Fragment {
         @Override
         public PostViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
             View view = getLayoutInflater().inflate(R.layout.post_row, parent, false);
-            PostViewHolder holder = new PostViewHolder(view, listener);
-            return holder;
+            return new PostViewHolder(view, listener);
         }
 
         @Override

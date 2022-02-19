@@ -20,7 +20,6 @@ import com.example.overcooked.helpers.ImageHandlerFragment;
 import com.example.overcooked.model.Model;
 import com.example.overcooked.model.Post;
 import com.getbase.floatingactionbutton.FloatingActionButton;
-import com.squareup.picasso.Picasso;
 
 public class CreatePostFragment extends ImageHandlerFragment {
 
@@ -58,32 +57,23 @@ public class CreatePostFragment extends ImageHandlerFragment {
         progressBar = view.findViewById(R.id.create_post_progress_bar);
         progressBar.setVisibility(View.GONE);
 
-        galleryBtn.setOnClickListener(v -> {
-            openGallery();
-        });
+        galleryBtn.setOnClickListener(v -> openGallery());
+        cameraBtn.setOnClickListener(v -> openCamera());
+        actionBtn.setOnClickListener(v -> create());
 
-        cameraBtn.setOnClickListener(v -> {
-            openCamera();
-        });
+        setPostData();
 
-        actionBtn.setOnClickListener(v -> {
-            create();
-        });
+        return view;
+    }
 
-
+    private void setPostData() {
         if (!isPostCreation) {
             titleEt.setText(post.getTitle());
             descriptionEt.setText(post.getDescription());
             contentEt.setText(post.getContent());
-            actionBtn.setText("Save");
-            if (post.getImg() != null) {
-                Picasso.get().load(post.getImg()).into(imageImv);
-            } else {
-                imageImv.setImageResource(R.drawable.main_logo);
-            }
+            actionBtn.setText(getString(R.string.saveText));
+            setImage(imageImv, post.getImg(), R.drawable.main_logo);
         }
-
-        return view;
     }
 
     @Override

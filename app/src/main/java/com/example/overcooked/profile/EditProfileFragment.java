@@ -20,7 +20,6 @@ import com.example.overcooked.helpers.ImageHandlerFragment;
 import com.example.overcooked.model.Model;
 import com.example.overcooked.model.User;
 import com.getbase.floatingactionbutton.FloatingActionButton;
-import com.squareup.picasso.Picasso;
 
 public class EditProfileFragment extends ImageHandlerFragment {
 
@@ -65,12 +64,7 @@ public class EditProfileFragment extends ImageHandlerFragment {
     }
 
     private void setProfileData() {
-        String img = user.getImg();
-        if (img != null) {
-            Picasso.get().load(img).into(profileImageImv);
-        } else {
-            profileImageImv.setImageResource(R.mipmap.ic_launcher_round);
-        }
+        setImage(profileImageImv, user.getImg(), R.mipmap.ic_launcher_round);
         displayNameEt.setText(user.getDisplayName());
         emailEt.setText(user.getEmail());
     }

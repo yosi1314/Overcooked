@@ -1,4 +1,4 @@
-package com.example.overcooked.model;
+package com.example.overcooked.model.firebase;
 
 import android.util.Log;
 
@@ -43,14 +43,11 @@ public class Authentication {
         FirebaseUser user;
         Exception ex = null;
         if (task.isSuccessful()) {
-            Log.d("UserAuthentication", "signInWithEmail:success");
             user = firebaseAuth.getCurrentUser();
         } else {
-            Log.w("UserAuthentication", "signInWithEmail:failure", task.getException());
             user = null;
             ex = task.getException();
         }
-
         listener.onComplete(user, ex);
     }
 }

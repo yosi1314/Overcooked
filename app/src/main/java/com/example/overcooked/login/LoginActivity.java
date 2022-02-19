@@ -35,17 +35,14 @@ public class LoginActivity extends AppCompatActivity {
 
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
-        if(!super.onOptionsItemSelected(item)){
-            switch (item.getItemId()) {
-                case android.R.id.home:
-                    navController.navigateUp();
-                    return true;
-                default:
-                    NavigationUI.onNavDestinationSelected(item, navController);
-            }
-        } else {
+        if(super.onOptionsItemSelected(item)) return true;
+
+        if (item.getItemId() == android.R.id.home) {
+            navController.navigateUp();
             return true;
+        } else {
+            NavigationUI.onNavDestinationSelected(item, navController);
+            return false;
         }
-        return false;
     }
 }

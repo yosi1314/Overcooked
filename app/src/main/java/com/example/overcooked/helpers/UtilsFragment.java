@@ -16,21 +16,26 @@ public class UtilsFragment extends Fragment {
         this.progressBar = progressBar;
 
         progressBar.setVisibility(View.VISIBLE);
-        ((AppCompatActivity)getActivity())
-                .getWindow()
-                .setFlags(
-                        WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE,
-                        WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE
-                );
+        try {
+            ((AppCompatActivity)getActivity())
+                    .getWindow()
+                    .setFlags(
+                            WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE,
+                            WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE
+                    );
+        } catch (NullPointerException ignored) { }
+
     }
 
     public void hideProgressBar(ProgressBar progressBar) {
         this.progressBar = progressBar;
 
         progressBar.setVisibility(View.GONE);
-        ((AppCompatActivity)getActivity())
-                .getWindow()
-                .clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
+        try {
+            ((AppCompatActivity)getActivity())
+                    .getWindow()
+                    .clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
+        } catch (NullPointerException ignored) {}
     }
 
     @Override

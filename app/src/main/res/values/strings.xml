@@ -22,4 +22,5 @@
     <string name="storage_users">user_thumbnails/</string>
     <string name="edit_profile">Edit Profile</string>
     <string name="save">SAVE</string>
+    <string name="saveText">Save</string>
 </resources>

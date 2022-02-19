@@ -17,8 +17,6 @@ public class BaseActivityViewModel extends ViewModel {
         users = Model.instance.getUsers();
     }
 
-    public LiveData<List<User>> getUsers() { return users; }
-
     public LiveData<User> getUserById(String uid) {
         MutableLiveData<User> userToReturn = new MutableLiveData<>();
         if (users.getValue() != null) {

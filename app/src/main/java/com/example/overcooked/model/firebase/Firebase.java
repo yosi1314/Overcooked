@@ -1,31 +1,16 @@
-package com.example.overcooked.model;
+package com.example.overcooked.model.firebase;
 
-import android.graphics.Bitmap;
-import android.net.Uri;
-import android.util.Log;
-
+import com.example.overcooked.model.Model;
+import com.example.overcooked.model.Post;
+import com.example.overcooked.model.User;
 import com.example.overcooked.model.interfaces.EmptyOnCompleteListener;
-import com.example.overcooked.model.interfaces.FirebaseUserOnCompleteListener;
-import com.example.overcooked.model.interfaces.ImageOnCompleteListener;
 import com.example.overcooked.model.interfaces.PostsOnCompleteListener;
-import com.example.overcooked.model.interfaces.UserOnCompleteListener;
 import com.example.overcooked.model.interfaces.UsersOnCompleteListener;
-import com.google.android.gms.tasks.Task;
 import com.google.firebase.Timestamp;
-import com.google.firebase.auth.AuthResult;
-import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseUser;
-import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.FirebaseFirestoreSettings;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
-import com.google.firebase.firestore.QuerySnapshot;
-import com.google.firebase.storage.FirebaseStorage;
-import com.google.firebase.storage.StorageReference;
-import com.google.firebase.storage.UploadTask;
-import com.google.protobuf.Empty;
 
-import java.io.ByteArrayOutputStream;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
@@ -69,11 +54,17 @@ public class Firebase {
 
     public void updatePost(Post post, EmptyOnCompleteListener listener) {
         Map<String, Object> json = post.toJson();
-        db.collection(Post.COLLECTION_NAME).document(post.id)
+        db.collection(Post.COLLECTION_NAME).document(post.getId())
                 .set(json).addOnCompleteListener(task -> {
             listener.onComplete();
             Model.instance.refreshPostsList();
+            Model.instance.refreshUsersList();
         });
+    }
+
+    public void deletePost(String id, EmptyOnCompleteListener listener) {
+        db.collection(Post.COLLECTION_NAME)
+                .document(id).delete().addOnCompleteListener(task -> listener.onComplete());
     }
 
     public void getUsers(Long lastUpdateDate, UsersOnCompleteListener listener) {
@@ -105,30 +96,7 @@ public class Firebase {
 
 
     public void updateUser(User user, EmptyOnCompleteListener listener) {
-        db.collection(User.COLLECTION_NAME).document(user.uid)
+        db.collection(User.COLLECTION_NAME).document(user.getUid())
                 .set(user).addOnCompleteListener(task -> listener.onComplete());
-    }
-
-    public void getUserByUid(String uid, Long lastUpdateDate, UserOnCompleteListener listener) {
-        db.collection(User.COLLECTION_NAME)
-                .whereGreaterThanOrEqualTo("updateDate", new Timestamp(lastUpdateDate, 0))
-                .whereEqualTo("uid", uid)
-                .get()
-                .addOnCompleteListener(task -> {
-                    User user = null;
-                    if (task.isSuccessful()) {
-                        for (QueryDocumentSnapshot doc : task.getResult()) {
-                            user = User.create(doc.getData());
-                        }
-                    }
-                    listener.onComplete(user);
-                });
-    }
-
-    public void deletePost(String id, EmptyOnCompleteListener listener) {
-        db.collection(Post.COLLECTION_NAME)
-                .document(id).delete().addOnCompleteListener(task -> {
-                    listener.onComplete();
-        });
     }
 }

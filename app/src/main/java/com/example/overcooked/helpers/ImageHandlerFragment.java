@@ -8,7 +8,9 @@ import android.provider.MediaStore;
 import android.widget.ImageView;
 
 import androidx.annotation.Nullable;
-import androidx.fragment.app.Fragment;
+
+import com.example.overcooked.R;
+import com.squareup.picasso.Picasso;
 
 import java.io.IOException;
 
@@ -17,6 +19,14 @@ public class ImageHandlerFragment extends UtilsFragment {
     private static final int REQUEST_GALLERY = 2;
 
     public ImageHandlerFragment(){}
+
+    public void setImage(ImageView imv, String img, int defaultImage) {
+        if (img != null) {
+            Picasso.get().load(img).into(imv);
+        } else {
+            imv.setImageResource(defaultImage);
+        }
+    }
 
     public void openCamera() {
         Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
@@ -42,9 +52,13 @@ public class ImageHandlerFragment extends UtilsFragment {
                 }
             }
         } else if (requestCode == REQUEST_CAMERA) {
-            Bundle extras = data.getExtras();
-            imageBitmap = (Bitmap) extras.get("data");
-            imageImv.setImageBitmap(imageBitmap);
+            try {
+                Bundle extras = data.getExtras();
+                imageBitmap = (Bitmap) extras.get("data");
+                imageImv.setImageBitmap(imageBitmap);
+            } catch (NullPointerException e) {
+                e.printStackTrace();
+            }
         }
         return imageBitmap;
     }

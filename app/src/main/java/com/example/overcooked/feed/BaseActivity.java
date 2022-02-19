@@ -6,33 +6,23 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
-import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentTransaction;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.navigation.NavController;
-import androidx.navigation.NavDirections;
 import androidx.navigation.NavHost;
-import androidx.navigation.Navigation;
-import androidx.navigation.ui.AppBarConfiguration;
 import androidx.navigation.ui.NavigationUI;
 
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
-import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.ImageView;
-import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.example.overcooked.R;
-import com.example.overcooked.helpers.IntentHelper;
 import com.example.overcooked.login.LoginActivity;
 import com.example.overcooked.model.Model;
-import com.example.overcooked.model.Post;
 import com.example.overcooked.model.User;
 import com.google.android.material.navigation.NavigationView;
 import com.squareup.picasso.Picasso;
@@ -145,7 +135,7 @@ public class BaseActivity extends AppCompatActivity implements NavigationView.On
                     navCtl.navigate(R.id.action_global_feedFragment, bundle);
                     break;
                 case R.id.menu_sign_out:
-                    Model.instance.signOut(() -> toLoginActivity());
+                    Model.instance.signOut(this::toLoginActivity);
                     break;
                 default:
                     NavigationUI.onNavDestinationSelected(item, navCtl);

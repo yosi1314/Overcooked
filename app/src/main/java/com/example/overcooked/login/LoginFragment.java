@@ -8,7 +8,6 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ProgressBar;
-import android.widget.Toast;
 
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.navigation.Navigation;
@@ -39,9 +38,7 @@ public class LoginFragment extends UtilsFragment {
         progressBar = view.findViewById(R.id.login_progress_bar);
         progressBar.setVisibility(View.GONE);
 
-        goToSignUp.setOnClickListener(v -> {
-            Navigation.findNavController(v).navigate(LoginFragmentDirections.actionLoginFragmentToRegisterFragment());
-        });
+        goToSignUp.setOnClickListener(v -> Navigation.findNavController(v).navigate(LoginFragmentDirections.actionLoginFragmentToRegisterFragment()));
 
         loginBtn.setOnClickListener(v -> {
             String email = emailEt.getText().toString();

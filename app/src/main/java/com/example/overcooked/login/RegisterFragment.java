@@ -10,15 +10,14 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
-import android.widget.Toast;
 
 import androidx.annotation.Nullable;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.navigation.Navigation;
 
 import com.example.overcooked.R;
+import com.example.overcooked.feed.BaseActivity;
 import com.example.overcooked.helpers.ImageHandlerFragment;
-import com.example.overcooked.helpers.IntentHelper;
 import com.example.overcooked.model.Model;
 import com.example.overcooked.model.User;
 import com.getbase.floatingactionbutton.FloatingActionButton;
@@ -38,8 +37,6 @@ public class RegisterFragment extends ImageHandlerFragment {
     FloatingActionButton cameraBtn;
     ImageView userImageImv;
     Bitmap imageBitmap;
-
-    private final IntentHelper intentHelper = new IntentHelper();
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -89,14 +86,10 @@ public class RegisterFragment extends ImageHandlerFragment {
                     if (imageBitmap != null) {
                         Model.instance.uploadImage(imageBitmap, uid + ".jpg", getString(R.string.storage_users), url -> {
                             userToAdd.setImg(url);
-                            Model.instance.createUser(userToAdd, () -> {
-                                intentHelper.toFeedActivity(this);
-                            });
+                            Model.instance.createUser(userToAdd, this::toFeedActivity);
                         });
                     } else {
-                        Model.instance.createUser(userToAdd, () -> {
-                            intentHelper.toFeedActivity(this);
-                        });
+                        Model.instance.createUser(userToAdd, this::toFeedActivity);
                     }
                 } else {
                     hideProgressBar(progressBar);
@@ -142,5 +135,11 @@ public class RegisterFragment extends ImageHandlerFragment {
     public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         imageBitmap = onResult(requestCode, resultCode, data, userImageImv);
+    }
+
+    private void toFeedActivity() {
+        Intent intent = new Intent(getContext(), BaseActivity.class);
+        startActivity(intent);
+        getActivity().finish();
     }
 }

@@ -10,7 +10,6 @@ import com.google.firebase.firestore.FieldValue;
 import java.io.Serializable;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Objects;
 
 @Entity
 public class User implements Serializable {
@@ -22,22 +21,23 @@ public class User implements Serializable {
     String displayName = "";
     String email = "";
     String img;
-    Long updateDate = new Long(0);
+    Long updateDate = 0L;
 
     public User() {
     }
 
-    public User(String uid, String displayName, String email) {
+    public User(@NonNull String uid, String displayName, String email) {
         this.uid = uid;
         this.displayName = displayName;
         this.email = email;
     }
 
+    @NonNull
     public String getUid() {
         return uid;
     }
 
-    public void setUid(String uid) {
+    public void setUid(@NonNull String uid) {
         this.uid = uid;
     }
 
@@ -74,7 +74,7 @@ public class User implements Serializable {
     }
 
     public Map<String, Object> toJson() {
-        Map<String, Object> json = new HashMap<String, Object>();
+        Map<String, Object> json = new HashMap<>();
         FieldValue timestamp = FieldValue.serverTimestamp();
         json.put("uid", uid);
         json.put("displayName", displayName);

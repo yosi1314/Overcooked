@@ -1,10 +1,12 @@
-package com.example.overcooked.model;
+package com.example.overcooked.model.daos;
 
 import androidx.room.Dao;
 import androidx.room.Insert;
 import androidx.room.OnConflictStrategy;
 import androidx.room.Query;
 import androidx.room.Update;
+
+import com.example.overcooked.model.User;
 
 import java.util.List;
 

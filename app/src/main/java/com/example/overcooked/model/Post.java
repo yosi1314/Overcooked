@@ -8,7 +8,6 @@ import com.google.firebase.Timestamp;
 import com.google.firebase.firestore.FieldValue;
 
 import java.io.Serializable;
-import java.lang.reflect.Field;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -23,12 +22,12 @@ public class Post implements Serializable {
     String author = "";
     String content = "";
     String img;
-    Long updateDate = new Long(0);
-    Long uploadDate = new Long(0);
+    Long updateDate = 0L;
+    Long uploadDate = 0L;
 
     public Post() { }
 
-    public Post(String id, String title, String description, String author, String content) {
+    public Post(@NonNull String id, String title, String description, String author, String content) {
         this.id = id;
         this.title = title;
         this.description = description;
@@ -36,11 +35,12 @@ public class Post implements Serializable {
         this.content = content;
     }
 
+    @NonNull
     public String getId() {
         return id;
     }
 
-    public void setId(String id) {
+    public void setId(@NonNull String id) {
         this.id = id;
     }
 
@@ -102,7 +102,7 @@ public class Post implements Serializable {
     }
 
     public Map<String, Object> toJson() {
-        Map<String, Object> json = new HashMap<String, Object>();
+        Map<String, Object> json = new HashMap<>();
         FieldValue timestamp = FieldValue.serverTimestamp();
         json.put("id", id);
         json.put("title", title);

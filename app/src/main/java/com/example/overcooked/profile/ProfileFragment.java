@@ -1,29 +1,24 @@
 package com.example.overcooked.profile;
 
 import android.os.Bundle;
-
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.fragment.app.Fragment;
-import androidx.navigation.Navigation;
-
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.navigation.Navigation;
+
 import com.example.overcooked.R;
-import com.example.overcooked.feed.FeedFragmentDirections;
-import com.example.overcooked.helpers.UtilsFragment;
+import com.example.overcooked.helpers.ImageHandlerFragment;
 import com.example.overcooked.model.Model;
 import com.example.overcooked.model.User;
 import com.getbase.floatingactionbutton.FloatingActionButton;
 import com.getbase.floatingactionbutton.FloatingActionsMenu;
-import com.squareup.picasso.Picasso;
 
-public class ProfileFragment extends UtilsFragment {
+public class ProfileFragment extends ImageHandlerFragment {
     User user;
     TextView displayNameTitleTv;
     TextView emailTitleTv;
@@ -50,18 +45,16 @@ public class ProfileFragment extends UtilsFragment {
         showProgressBar(progressBar);
 
         Model.instance.getUserById(Model.instance.getCurrentUserUID(), user -> {
-            this.user = user;
             hideProgressBar(progressBar);
             showInitialData();
 
-            displayNameTv.setText(user.getDisplayName());
-            emailTv.setText(user.getEmail());
-            if(user.getImg() != null){
-                Picasso.get().load(user.getImg()).into(userImage);
-            } else {
-                userImage.setImageResource(R.mipmap.ic_launcher_round);
+            if(user != null) {
+                this.user = user;
+                displayNameTv.setText(user.getDisplayName());
+                emailTv.setText(user.getEmail());
+                setImage(userImage, user.getImg(), R.mipmap.ic_launcher_round);
+                editButton.setEnabled(true);
             }
-            editButton.setEnabled(true);
         });
 
         editButton.setOnClickListener(v -> {

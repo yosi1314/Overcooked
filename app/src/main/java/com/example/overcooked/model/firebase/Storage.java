@@ -1,7 +1,6 @@
-package com.example.overcooked.model;
+package com.example.overcooked.model.firebase;
 
 import android.graphics.Bitmap;
-import android.net.Uri;
 
 import com.example.overcooked.model.interfaces.ImageOnCompleteListener;
 import com.google.firebase.storage.FirebaseStorage;
@@ -25,9 +24,6 @@ public class Storage {
 
         UploadTask uploadTask = imageReference.putBytes(data);
         uploadTask.addOnFailureListener(exception -> listener.onComplete(null))
-                .addOnCompleteListener(task -> imageReference.getDownloadUrl().addOnSuccessListener(uri -> {
-                    Uri downloadUrl = uri;
-                    listener.onComplete(downloadUrl.toString());
-                }));
+                .addOnCompleteListener(task -> imageReference.getDownloadUrl().addOnSuccessListener(uri -> listener.onComplete(uri.toString())));
     }
 }
