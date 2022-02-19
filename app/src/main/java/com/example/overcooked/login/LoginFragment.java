@@ -41,6 +41,7 @@ public class LoginFragment extends UtilsFragment {
         goToSignUp.setOnClickListener(v -> Navigation.findNavController(v).navigate(LoginFragmentDirections.actionLoginFragmentToRegisterFragment()));
 
         loginBtn.setOnClickListener(v -> {
+            hideKeyboard();
             String email = emailEt.getText().toString();
             String password = passwordEt.getText().toString();
 

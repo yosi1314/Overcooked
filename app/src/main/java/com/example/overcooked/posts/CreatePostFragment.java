@@ -135,6 +135,7 @@ public class CreatePostFragment extends ImageHandlerFragment {
                 Navigation.findNavController(titleEt).navigateUp();
             });
         } else {
+            newPost.setUploadDate(post.getUploadDate());
             Model.instance.updatePost(newPost, () -> {
                 hideProgressBar(progressBar);
                 Navigation.findNavController(titleEt).navigateUp();

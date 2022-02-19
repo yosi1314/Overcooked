@@ -98,6 +98,7 @@ public class Model {
     public LiveData<List<Post>> getAllPosts() {
         if (posts.getValue() == null) {
             refreshPostsList();
+            refreshUsersList();
         }
         return posts;
     }

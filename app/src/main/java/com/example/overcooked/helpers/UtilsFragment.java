@@ -1,7 +1,9 @@
 package com.example.overcooked.helpers;
 
+import android.content.Context;
 import android.view.View;
 import android.view.WindowManager;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.ProgressBar;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -36,6 +38,11 @@ public class UtilsFragment extends Fragment {
                     .getWindow()
                     .clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
         } catch (NullPointerException ignored) {}
+    }
+
+    public void hideKeyboard() {
+        final InputMethodManager imm = (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
+        imm.hideSoftInputFromWindow(getView().getWindowToken(), 0);
     }
 
     @Override

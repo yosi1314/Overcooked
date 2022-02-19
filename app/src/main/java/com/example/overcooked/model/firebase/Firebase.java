@@ -44,7 +44,7 @@ public class Firebase {
     }
 
     public void addPost(Post post, EmptyOnCompleteListener listener) {
-        Map<String, Object> json = post.toJson();
+        Map<String, Object> json = post.toJson(true);
         db.collection(Post.COLLECTION_NAME)
                 .document(post.getId())
                 .set(json)
@@ -53,7 +53,7 @@ public class Firebase {
     }
 
     public void updatePost(Post post, EmptyOnCompleteListener listener) {
-        Map<String, Object> json = post.toJson();
+        Map<String, Object> json = post.toJson(false);
         db.collection(Post.COLLECTION_NAME).document(post.getId())
                 .set(json).addOnCompleteListener(task -> {
             listener.onComplete();
@@ -96,7 +96,8 @@ public class Firebase {
 
 
     public void updateUser(User user, EmptyOnCompleteListener listener) {
+        Map<String, Object> json = user.toJson();
         db.collection(User.COLLECTION_NAME).document(user.getUid())
-                .set(user).addOnCompleteListener(task -> listener.onComplete());
+                .set(json).addOnCompleteListener(task -> listener.onComplete());
     }
 }

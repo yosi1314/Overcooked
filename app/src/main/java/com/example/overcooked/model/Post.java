@@ -8,6 +8,7 @@ import com.google.firebase.Timestamp;
 import com.google.firebase.firestore.FieldValue;
 
 import java.io.Serializable;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -101,16 +102,17 @@ public class Post implements Serializable {
         return uploadDate;
     }
 
-    public Map<String, Object> toJson() {
+    public Map<String, Object> toJson(boolean isCreating) {
         Map<String, Object> json = new HashMap<>();
         FieldValue timestamp = FieldValue.serverTimestamp();
+
         json.put("id", id);
         json.put("title", title);
         json.put("description", description);
         json.put("author", author);
         json.put("content", content);
         json.put("updateDate", timestamp);
-        json.put("uploadDate", timestamp);
+        json.put("uploadDate", isCreating ? timestamp : new Timestamp(new Date(uploadDate * 1000)));
         json.put("image", img);
 
         return json;

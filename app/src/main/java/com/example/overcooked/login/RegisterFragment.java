@@ -70,6 +70,7 @@ public class RegisterFragment extends ImageHandlerFragment {
     }
 
     private void registerUser() {
+        hideKeyboard();
         String displayName = displayNameEt.getText().toString();
         String email = emailEt.getText().toString();
         String password = passwordEt.getText().toString();
